@@ -59,7 +59,7 @@
     </div>
 
     <h2 class="ui dividing header">Balanço</h2>
-<div id="balanco" class="ui large header segment"></div>
+    <div id="balanco" class="ui large header segment"></div>
   </div>
 
   <!-- Modal para adicionar Receita -->
@@ -142,30 +142,39 @@
       $('.money').mask('000.000.000.000.000,00', { reverse: true });
       $('.ui.dropdown').dropdown();
 
+      // Variáveis globais
+      var receitas = [];
+      var despesas = [];
+
       // Função para salvar os dados de receitas e despesas no localStorage
-    function salvarDados() {
-      localStorage.setItem('receitas', JSON.stringify(receitas));
-      localStorage.setItem('despesas', JSON.stringify(despesas));
-    }
-
-    // Função para carregar os dados de receitas e despesas do localStorage
-    function carregarDados() {
-      var receitasData = localStorage.getItem('receitas');
-      if (receitasData) {
-        receitas = JSON.parse(receitasData);
-        renderReceitas();
+      function salvarDados() {
+        localStorage.setItem('receitas', JSON.stringify(receitas));
+        localStorage.setItem('despesas', JSON.stringify(despesas));
       }
 
-      var despesasData = localStorage.getItem('despesas');
-      if (despesasData) {
-        despesas = JSON.parse(despesasData);
-        renderDespesas();
-      }
-    }
 
-    // Carregar dados armazenados ao carregar a página
-    carregarDados();
-    calcularBalanco();
+      // Função para carregar os dados de receitas e despesas do localStorage
+      function carregarDados() {
+        var receitasData = localStorage.getItem('receitas');
+        if (receitasData) {
+          receitas = JSON.parse(receitasData);
+          renderReceitas();
+        }
+
+        var despesasData = localStorage.getItem('despesas');
+        if (despesasData) {
+          despesas = JSON.parse(despesasData);
+          renderDespesas();
+        }
+        calcularBalanco(); // Calcular balanço após carregar os dados
+      }
+
+      // Inicializar os modais com a opção closable: false
+      $('#add-receita-modal').modal({ closable: false });
+      $('#add-despesa-modal').modal({ closable: false });
+
+      // Carregar dados armazenados ao carregar a página
+      carregarDados();
 
 
 
@@ -173,8 +182,6 @@
       $('#add-receita-modal').modal({ closable: false });
       $('#add-despesa-modal').modal({ closable: false });
 
-      var receitas = [];
-      var despesas = [];
 
       // Adicionar Receita
       $('#add-receita').on('click', function () {
@@ -211,8 +218,8 @@
           // Limpar os campos do formulário
           $('#form-receita')[0].reset();
 
-           // Salvar os dados após adicionar receita
-        salvarDados();
+          calcularBalanco(); // Atualizar balanço após adicionar receita
+         salvarDados(); // Salvar os dados após adicionar receita
 
         } else {
           alert('Preencha todos os campos!');
@@ -241,8 +248,8 @@
           // Limpar os campos do formulário
           $('#form-despesa')[0].reset();
 
-           // Salvar os dados após adicionar receita
-        salvarDados();
+          calcularBalanco(); // Atualizar balanço após adicionar despesa
+          salvarDados(); // Salvar os dados após adicionar despesa
         } else {
           alert('Preencha todos os campos!');
         }
@@ -284,8 +291,8 @@
           receitas.splice(index, 1);
           renderReceitas();
           calcularBalanco();
-           // Salvar os dados após adicionar receita
-        salvarDados();
+          // Salvar os dados após adicionar receita
+          salvarDados();
         }).popup({
           position: 'top center',
           content: 'Excluir Receita',
@@ -317,8 +324,8 @@
           despesas.splice(index, 1);
           renderDespesas();
           calcularBalanco();
-           // Salvar os dados após adicionar receita
-        salvarDados();
+          // Salvar os dados após adicionar receita
+          salvarDados();
         });
       }
 
@@ -360,10 +367,10 @@
       }
 
 
-    
+
 
     });
-    
+
   </script>
 </body>
 
