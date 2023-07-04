@@ -50,7 +50,8 @@
     </table>
 
 
-    <div class="ui primary animated vertical button" id="add-despesa" data-content="Add" data-position="top center" tabindex="1">
+    <div class="ui primary animated vertical button" id="add-despesa" data-content="Add" data-position="top center"
+      tabindex="1">
       <div class="visible content"><i class="plus circle icon"></i> Adicionar Despesa</div>
       <div class="hidden content">
         <div><i class="plus circle icon"></i> Adicionar Despesa</div>
@@ -89,7 +90,34 @@
       <form id="form-despesa" class="ui form">
         <div class="fields">
           <div class="eight wide field">
-            <input type="text" name="modal-despesa-descricao" placeholder="Descrição">
+            <div class="ui fluid search selection dropdown">
+              <input type="hidden" name="modal-despesa-descricao">
+              <i class="dropdown icon"></i>
+              <div class="default text">Selecione uma despesa</div>
+              <div class="menu">
+                <div class="item" data-value="alimentacao"><i class="utensils icon"></i>Alimentação</div>
+                <div class="item" data-value="transporte"><i class="bus icon"></i>Transporte</div>
+                <div class="item" data-value="moradia"><i class="home icon"></i>Moradia</div>
+                <div class="item" data-value="saude"><i class="medkit icon"></i>Saúde</div>
+                <div class="item" data-value="educacao"><i class="graduation cap icon"></i>Educação</div>
+                <div class="item" data-value="entretenimento"><i class="gamepad icon"></i>Entretenimento</div>
+                <div class="item" data-value="compras"><i class="shopping bag icon"></i>Compras</div>
+                <div class="item" data-value="contas"><i class="file invoice dollar icon"></i>Contas</div>
+                <div class="item" data-value="viagem"><i class="plane icon"></i>Viagem</div>
+                <div class="item" data-value="lazer"><i class="camera retro icon"></i>Lazer</div>
+                <div class="item" data-value="carro"><i class="car icon"></i>Carro</div>
+                <div class="item" data-value="seguro"><i class="shield alternate icon"></i>Seguro</div>
+                <div class="item" data-value="telecomunicacoes"><i class="phone icon"></i>Telecomunicações</div>
+                <div class="item" data-value="impostos"><i class="file alternate icon"></i>Impostos</div>
+                <div class="item" data-value="doacoes"><i class="heart icon"></i>Doações</div>
+                <div class="item" data-value="investimentos"><i class="chart line icon"></i>Investimentos</div>
+                <div class="item" data-value="emergencia"><i class="first aid icon"></i>Emergência</div>
+                <div class="item" data-value="assinaturas"><i class="newspaper icon"></i>Assinaturas</div>
+                <div class="item" data-value="internet"><i class="wifi icon"></i>Internet</div>
+                <div class="item" data-value="outros"><i class="ellipsis horizontal icon"></i>Outros</div>
+              </div>
+            </div>
+
           </div>
           <div class="eight wide field">
             <input type="text" class="money" name="modal-despesa-valor" placeholder="Valor">
@@ -112,6 +140,7 @@
   <script>
     $(document).ready(function () {
       $('.money').mask('000.000.000.000.000,00', { reverse: true });
+      $('.ui.dropdown').dropdown();
 
       // Inicializar os modais com a opção closable: false
       $('#add-receita-modal').modal({ closable: false });
@@ -236,15 +265,15 @@
           var despesa = despesas[i];
 
           var row = '<tr>' +
-            '<td class="four wide column">' + despesa.descricao + '</td>' +
+            '<td class="four wide column">' + capitalizeDescription(despesa.descricao) + '</td>' +
             '<td class="four wide column">' + despesa.valor + '</td>' +
             '<td class="two wide column"><button class="ui negative button excluir-despesa" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center">Excluir</button></td>' +
             '</tr>';
 
           despesasTable.append(row);
         }
-         // Ativar o componente de popup
-         $('.excluir-despesa').popup();
+        // Ativar o componente de popup
+        $('.excluir-despesa').popup();
 
         // Adicionar evento de exclusão para os botões de excluir despesa
         $('.excluir-despesa').on('click', function () {
@@ -286,6 +315,14 @@
         var formattedValue = value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         return formattedValue;
       }
+
+      // Função para capitalizar a descrição
+      function capitalizeDescription(description) {
+        return description.charAt(0).toUpperCase() + description.slice(1);
+      }
+
+
+    
 
     });
   </script>
