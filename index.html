@@ -28,7 +28,7 @@
       </thead>
       <tbody></tbody>
     </table>
-    
+
     <button class="ui primary button" id="add-receita">Adicionar Receita</button>
 
     <h2 class="ui dividing header">Despesas</h2>
@@ -42,7 +42,7 @@
       </thead>
       <tbody></tbody>
     </table>
-    
+
     <button class="ui primary button" id="add-despesa">Adicionar Despesa</button>
 
     <h2 class="ui dividing header">Balanço</h2>
@@ -50,7 +50,7 @@
   </div>
 
   <!-- Modal para adicionar Receita -->
-  <div id="add-receita-modal" class="ui modal">
+  <div id="add-receita-modal" class="ui modal" data-closable="false">
     <div class="header">Adicionar Receita</div>
     <div class="content">
       <div class="ui form">
@@ -66,12 +66,12 @@
     </div>
     <div class="actions">
       <div class="ui primary button" id="modal-add-receita">Adicionar</div>
-      <div class="ui button">Cancelar</div>
+      <div class="ui button" id="modal-cancel-receita">Cancelar</div>
     </div>
   </div>
 
   <!-- Modal para adicionar Despesa -->
-  <div id="add-despesa-modal" class="ui modal">
+  <div id="add-despesa-modal" class="ui modal" data-closable="false">
     <div class="header">Adicionar Despesa</div>
     <div class="content">
       <div class="ui form">
@@ -87,7 +87,7 @@
     </div>
     <div class="actions">
       <div class="ui primary button" id="modal-add-despesa">Adicionar</div>
-      <div class="ui button">Cancelar</div>
+      <div class="ui button" id="modal-cancel-despesa">Cancelar</div>
     </div>
   </div>
 
@@ -98,6 +98,10 @@
   <script>
     $(document).ready(function () {
       $('.money').mask('000.000.000.000.000,00', { reverse: true });
+
+      // Inicializar os modais com a opção closable: false
+      $('#add-receita-modal').modal({ closable: false });
+      $('#add-despesa-modal').modal({ closable: false });
 
       var receitas = [];
       var despesas = [];
@@ -154,6 +158,16 @@
         } else {
           alert('Preencha todos os campos!');
         }
+      });
+
+      // Evento de clique para o botão "Cancelar" da modal de Receita
+      $('#modal-cancel-receita').on('click', function () {
+        $('#add-receita-modal').modal('hide');
+      });
+
+      // Evento de clique para o botão "Cancelar" da modal de Despesa
+      $('#modal-cancel-despesa').on('click', function () {
+        $('#add-despesa-modal').modal('hide');
       });
 
       // Renderizar Receitas
