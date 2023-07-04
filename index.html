@@ -21,29 +21,41 @@
     <table id="receitas-table" class="ui celled table">
       <thead>
         <tr>
-          <th>Descrição</th>
-          <th>Valor</th>
-          <th>Ação</th>
+          <th class="four wide column">Descrição</th>
+          <th class="four wide column">Valor</th>
+          <th class="two wide column">Ação</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
 
-    <button class="ui primary button" id="add-receita">Adicionar Receita</button>
+
+    <div class="ui primary animated vertical button" id="add-receita" tabindex="0">
+      <div class="visible content"><i class="plus circle icon"></i> Adicionar Receita</div>
+      <div class="hidden content">
+        <div><i class="plus circle icon"></i> Adicionar Receita</div>
+      </div>
+    </div>
 
     <h2 class="ui dividing header">Despesas</h2>
     <table id="despesas-table" class="ui celled table">
       <thead>
         <tr>
-          <th>Descrição</th>
-          <th>Valor</th>
-          <th>Ação</th>
+          <th class="four wide column">Descrição</th>
+          <th class="four wide column">Valor</th>
+          <th class="two wide column">Ação</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
 
-    <button class="ui primary button" id="add-despesa">Adicionar Despesa</button>
+
+    <div class="ui primary animated vertical button" id="add-despesa" data-content="Add" data-position="top center" tabindex="1">
+      <div class="visible content"><i class="plus circle icon"></i> Adicionar Despesa</div>
+      <div class="hidden content">
+        <div><i class="plus circle icon"></i> Adicionar Despesa</div>
+      </div>
+    </div>
 
     <h2 class="ui dividing header">Balanço</h2>
     <div id="balanco" class="ui large header"></div>
@@ -53,19 +65,19 @@
   <div id="add-receita-modal" class="ui modal" data-closable="false">
     <div class="header">Adicionar Receita</div>
     <div class="content">
-      <div class="ui form">
+      <form id="form-receita" class="ui form">
         <div class="fields">
           <div class="eight wide field">
-            <input type="text" id="modal-receita-descricao" placeholder="Descrição">
+            <input type="text" name="modal-receita-descricao" placeholder="Descrição">
           </div>
           <div class="eight wide field">
-            <input type="text" class="money" id="modal-receita-valor" placeholder="Valor">
+            <input type="text" class="money" name="modal-receita-valor" placeholder="Valor">
           </div>
         </div>
-      </div>
+      </form>
     </div>
     <div class="actions">
-      <div class="ui primary button" id="modal-add-receita">Adicionar</div>
+      <button type="submit" form="form-receita" class="ui primary button">Adicionar</button>
       <div class="ui button" id="modal-cancel-receita">Cancelar</div>
     </div>
   </div>
@@ -74,22 +86,24 @@
   <div id="add-despesa-modal" class="ui modal" data-closable="false">
     <div class="header">Adicionar Despesa</div>
     <div class="content">
-      <div class="ui form">
+      <form id="form-despesa" class="ui form">
         <div class="fields">
           <div class="eight wide field">
-            <input type="text" id="modal-despesa-descricao" placeholder="Descrição">
+            <input type="text" name="modal-despesa-descricao" placeholder="Descrição">
           </div>
           <div class="eight wide field">
-            <input type="text" class="money" id="modal-despesa-valor" placeholder="Valor">
+            <input type="text" class="money" name="modal-despesa-valor" placeholder="Valor">
           </div>
         </div>
-      </div>
+      </form>
     </div>
     <div class="actions">
-      <div class="ui primary button" id="modal-add-despesa">Adicionar</div>
+      <button type="submit" form="form-despesa" class="ui primary button">Adicionar</button>
       <div class="ui button" id="modal-cancel-despesa">Cancelar</div>
     </div>
   </div>
+
+
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -116,10 +130,15 @@
         $('#add-despesa-modal').modal('show');
       });
 
-      // Adicionar Receita através do modal
-      $('#modal-add-receita').on('click', function () {
-        var descricao = $('#modal-receita-descricao').val();
-        var valor = $('#modal-receita-valor').val();
+      $('#add-despesa').popup();
+
+
+      // Evento de submit para o formulário de Receita
+      $('#form-receita').on('submit', function (e) {
+        e.preventDefault(); // Evita que o formulário seja submetido normalmente
+
+        var descricao = $('[name="modal-receita-descricao"]').val();
+        var valor = $('[name="modal-receita-valor"]').val();
 
         if (descricao && valor) {
           var receita = {
@@ -133,15 +152,19 @@
           $('#modal-receita-descricao').val('');
           $('#modal-receita-valor').val('');
           $('#add-receita-modal').modal('hide');
+          // Limpar os campos do formulário
+          $('#form-receita')[0].reset();
         } else {
           alert('Preencha todos os campos!');
         }
       });
 
-      // Adicionar Despesa através do modal
-      $('#modal-add-despesa').on('click', function () {
-        var descricao = $('#modal-despesa-descricao').val();
-        var valor = $('#modal-despesa-valor').val();
+      // Evento de submit para o formulário de Despesa
+      $('#form-despesa').on('submit', function (e) {
+        e.preventDefault(); // Evita que o formulário seja submetido normalmente
+
+        var descricao = $('[name="modal-despesa-descricao"]').val();
+        var valor = $('[name="modal-despesa-valor"]').val();
 
         if (descricao && valor) {
           var despesa = {
@@ -155,10 +178,13 @@
           $('#modal-despesa-descricao').val('');
           $('#modal-despesa-valor').val('');
           $('#add-despesa-modal').modal('hide');
+          // Limpar os campos do formulário
+          $('#form-despesa')[0].reset();
         } else {
           alert('Preencha todos os campos!');
         }
       });
+
 
       // Evento de clique para o botão "Cancelar" da modal de Receita
       $('#modal-cancel-receita').on('click', function () {
@@ -179,20 +205,25 @@
           var receita = receitas[i];
 
           var row = '<tr>' +
-            '<td>' + receita.descricao + '</td>' +
-            '<td>' + receita.valor + '</td>' +
-            '<td><button class="ui negative button excluir-receita" data-index="' + i + '">Excluir</button></td>' +
+            '<td class="four wide column">' + receita.descricao + '</td>' +
+            '<td class="four wide column">' + receita.valor + '</td>' +
+            '<td class="two wide column"><button class="ui negative button excluir-receita" data-index="' + i + '" data-content="Excluir Receita" data-position="top center">Excluir</button></td>' +
             '</tr>';
 
           receitasTable.append(row);
         }
 
+        // Ativar o componente de popup
+        $('.excluir-receita').popup();
         // Adicionar evento de exclusão para os botões de excluir receita
         $('.excluir-receita').on('click', function () {
           var index = $(this).data('index');
           receitas.splice(index, 1);
           renderReceitas();
           calcularBalanco();
+        }).popup({
+          position: 'top center',
+          content: 'Excluir Receita',
         });
       }
 
@@ -205,13 +236,15 @@
           var despesa = despesas[i];
 
           var row = '<tr>' +
-            '<td>' + despesa.descricao + '</td>' +
-            '<td>' + despesa.valor + '</td>' +
-            '<td><button class="ui negative button excluir-despesa" data-index="' + i + '">Excluir</button></td>' +
+            '<td class="four wide column">' + despesa.descricao + '</td>' +
+            '<td class="four wide column">' + despesa.valor + '</td>' +
+            '<td class="two wide column"><button class="ui negative button excluir-despesa" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center">Excluir</button></td>' +
             '</tr>';
 
           despesasTable.append(row);
         }
+         // Ativar o componente de popup
+         $('.excluir-despesa').popup();
 
         // Adicionar evento de exclusão para os botões de excluir despesa
         $('.excluir-despesa').on('click', function () {
