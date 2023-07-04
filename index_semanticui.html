@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestão Financeira</title>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+  <style>
+    body {
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="ui container" style="margin-top: 50px;">
+    <h1 class="ui header">Gestão Financeira</h1>
+
+    <h2 class="ui dividing header">Salários</h2>
+    <div class="ui grid">
+      <div class="eight wide computer sixteen wide mobile column">
+        <div class="ui form">
+          <div class="field">
+            <label>Salário da pessoa 1:</label>
+            <input type="text" class="money" id="salario1" placeholder="Salário pessoa 1" value="0">
+          </div>
+        </div>
+      </div>
+      <div class="eight wide computer sixteen wide mobile column">
+        <div class="ui form">
+          <div class="field">
+            <label>Salário da pessoa 2:</label>
+            <input type="text" class="money" id="salario2" placeholder="Salário pessoa 2" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="ui dividing header">Despesas Fixas</h2>
+    <div class="ui grid">
+      <div class="four wide computer sixteen wide mobile column">
+        <div class="ui form">
+          <div class="field">
+            <label>Netflix:</label>
+            <input type="text" class="money" id="netflix" placeholder="Valor Netflix" value="0">
+          </div>
+        </div>
+      </div>
+      <div class="four wide computer sixteen wide mobile column">
+        <div class="ui form">
+          <div class="field">
+            <label>Internet:</label>
+            <input type="text" class="money" id="internet" placeholder="Valor Internet" value="0">
+          </div>
+        </div>
+      </div>
+      <div class="four wide computer sixteen wide mobile column">
+        <div class="ui form">
+          <div class="field">
+            <label>Energia:</label>
+            <input type="text" class="money" id="energia" placeholder="Valor Energia" value="0">
+          </div>
+        </div>
+      </div>
+      <div class="four wide computer sixteen wide mobile column">
+        <div class="ui form">
+          <div class="field">
+            <label>Água:</label>
+            <input type="text" class="money" id="agua" placeholder="Valor Água" value="0">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="ui dividing header">Despesas Variáveis</h2>
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Valor</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="despesas-table">
+      </tbody>
+    </table>
+    <div class="ui form">
+      <div class="two fields">
+        <div class="field">
+            <div class="ui fluid search selection dropdown">
+                <input id="descricao" type="hidden" name="despesa_variavel">
+                <i class="dropdown icon"></i>
+                <div class="default text">Selecione uma despesa variável</div>
+                <div class="menu">
+                  <div class="item" data-value="alimentacao">Alimentação</div>
+                  <div class="item" data-value="transporte">Transporte</div>
+                  <div class="item" data-value="moradia">Moradia</div>
+                  <div class="item" data-value="saude">Saúde</div>
+                  <div class="item" data-value="educacao">Educação</div>
+                  <div class="item" data-value="lazer">Lazer</div>
+                  <div class="item" data-value="vestuario">Vestuário</div>
+                  <div class="item" data-value="comunicacao">Comunicação</div>
+                  <div class="item" data-value="energia">Energia</div>
+                  <div class="item" data-value="agua">Água</div>
+                  <div class="item" data-value="internet">Internet</div>
+                  <div class="item" data-value="tv_cabo">TV a cabo</div>
+                  <div class="item" data-value="telefone">Telefone</div>
+                  <div class="item" data-value="gas">Gás</div>
+                  <div class="item" data-value="luz">Luz</div>
+                  <div class="item" data-value="combustivel">Combustível</div>
+                  <div class="item" data-value="cinema">Cinema</div>
+                  <div class="item" data-value="restaurante">Restaurante</div>
+                  <div class="item" data-value="viagem">Viagem</div>
+                  <div class="item" data-value="presentes">Presentes</div>
+                </div>
+              </div>
+              
+        </div>
+        <div class="field">
+          <input type="text" class="money" id="valor" placeholder="Valor" value="0">
+        </div>
+      </div>
+    </div>
+    <button class="ui primary button" id="add-despesa">Adicionar Despesa</button>
+
+    <h2 class="ui dividing header">Total de Despesas</h2>
+    <h4 id="total-despesas">R$ 0</h4>
+
+    <h2 class="ui dividing header">Total Disponível</h2>
+    <h4 id="total-disponivel">R$ 0</h4>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $(".money").mask('000.000.000.000.000,00', {reverse: true});
+      $('.ui.dropdown').dropdown();
+
+      $("#add-despesa").click(function() {
+        var descricao = $("#descricao").val();
+        var valor = parseFloat($("#valor").val().replace(/\./g, "").replace(",", "."));
+
+        if (descricao && !isNaN(valor)) {
+          let capitalizeDesc = descricao.substring(0, 1).toUpperCase() + descricao.substring(1);
+
+          var row = "<tr><td>" + capitalizeDesc + "</td><td>R$ " + valor.toFixed(2) + "</td><td><button class='ui icon button delete-despesa'><i class='trash alternate outline icon'></i></button></td></tr>";
+
+          $("#despesas-table").append(row);
+          $("#descricao").val("");
+          $("#valor").val("");
+
+          calcularTotalDespesas();
+          calcularTotalDisponivel();
+        }
+      });
+
+      // Adicionar evento de clique para remover despesa
+      $("#despesas-table").on("click", ".delete-despesa", function() {
+        $(this).closest("tr").remove();
+        calcularTotalDespesas();
+        calcularTotalDisponivel();
+      });
+
+
+      function calcularTotalDespesas() {
+        var totalDespesas = 0;
+
+        $("#despesas-table tr").each(function() {
+          var valorDespesa = parseFloat($(this).find("td:eq(1)").text().replace("R$ ", ""));
+          totalDespesas += valorDespesa;
+        });
+
+        $("#total-despesas").text("R$ " + totalDespesas.toFixed(2));
+      }
+
+      function calcularTotalDisponivel() {
+        var salario1 = parseFloat($("#salario1").val().replace(/\./g, "").replace(",", ".")) || 0;
+        var salario2 = parseFloat($("#salario2").val().replace(/\./g, "").replace(",", ".")) || 0;
+        var despesasFixas = parseFloat($("#netflix").val().replace(/\./g, "").replace(",", ".")) +
+          parseFloat($("#internet").val().replace(/\./g, "").replace(",", ".")) +
+          parseFloat($("#energia").val().replace(/\./g, "").replace(",", ".")) +
+          parseFloat($("#agua").val().replace(/\./g, "").replace(",", "."));
+        var totalDespesas = parseFloat($("#total-despesas").text().replace("R$ ", ""));
+
+        var totalDisponivel = salario1 + salario2 - despesasFixas - totalDespesas;
+        $("#total-disponivel").text("R$ " + totalDisponivel.toFixed(2));
+      }
+
+      $(".money").change(function() {
+        calcularTotalDisponivel();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,133 +1,94 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestão Financeira</title>
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
   <style>
     body {
       padding: 20px;
     }
   </style>
 </head>
+
 <body>
-  <div class="ui container" style="margin-top: 50px;">
-    <h1 class="ui header">Gestão Financeira</h1>
-
-    <h2 class="ui dividing header">Salários</h2>
-    <div class="ui grid">
-      <div class="eight wide computer sixteen wide mobile column">
-        <div class="ui form">
-          <div class="field">
-            <label>Salário da pessoa 1:</label>
-            <input type="text" class="money" id="salario1" placeholder="Salário pessoa 1" value="0">
-          </div>
-        </div>
-      </div>
-      <div class="eight wide computer sixteen wide mobile column">
-        <div class="ui form">
-          <div class="field">
-            <label>Salário da pessoa 2:</label>
-            <input type="text" class="money" id="salario2" placeholder="Salário pessoa 2" value="0">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h2 class="ui dividing header">Despesas Fixas</h2>
-    <div class="ui grid">
-      <div class="four wide computer sixteen wide mobile column">
-        <div class="ui form">
-          <div class="field">
-            <label>Netflix:</label>
-            <input type="text" class="money" id="netflix" placeholder="Valor Netflix" value="0">
-          </div>
-        </div>
-      </div>
-      <div class="four wide computer sixteen wide mobile column">
-        <div class="ui form">
-          <div class="field">
-            <label>Internet:</label>
-            <input type="text" class="money" id="internet" placeholder="Valor Internet" value="0">
-          </div>
-        </div>
-      </div>
-      <div class="four wide computer sixteen wide mobile column">
-        <div class="ui form">
-          <div class="field">
-            <label>Energia:</label>
-            <input type="text" class="money" id="energia" placeholder="Valor Energia" value="0">
-          </div>
-        </div>
-      </div>
-      <div class="four wide computer sixteen wide mobile column">
-        <div class="ui form">
-          <div class="field">
-            <label>Água:</label>
-            <input type="text" class="money" id="agua" placeholder="Valor Água" value="0">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <h2 class="ui dividing header">Despesas Variáveis</h2>
-    <table class="ui celled table">
+  <div class="ui container">
+    <h2 class="ui dividing header">Receitas</h2>
+    <table id="receitas-table" class="ui celled table">
       <thead>
         <tr>
           <th>Descrição</th>
           <th>Valor</th>
-          <th></th>
+          <th>Ação</th>
         </tr>
       </thead>
-      <tbody id="despesas-table">
-      </tbody>
+      <tbody></tbody>
     </table>
-    <div class="ui form">
-      <div class="two fields">
-        <div class="field">
-            <div class="ui fluid search selection dropdown">
-                <input id="descricao" type="hidden" name="despesa_variavel">
-                <i class="dropdown icon"></i>
-                <div class="default text">Selecione uma despesa variável</div>
-                <div class="menu">
-                  <div class="item" data-value="alimentacao">Alimentação</div>
-                  <div class="item" data-value="transporte">Transporte</div>
-                  <div class="item" data-value="moradia">Moradia</div>
-                  <div class="item" data-value="saude">Saúde</div>
-                  <div class="item" data-value="educacao">Educação</div>
-                  <div class="item" data-value="lazer">Lazer</div>
-                  <div class="item" data-value="vestuario">Vestuário</div>
-                  <div class="item" data-value="comunicacao">Comunicação</div>
-                  <div class="item" data-value="energia">Energia</div>
-                  <div class="item" data-value="agua">Água</div>
-                  <div class="item" data-value="internet">Internet</div>
-                  <div class="item" data-value="tv_cabo">TV a cabo</div>
-                  <div class="item" data-value="telefone">Telefone</div>
-                  <div class="item" data-value="gas">Gás</div>
-                  <div class="item" data-value="luz">Luz</div>
-                  <div class="item" data-value="combustivel">Combustível</div>
-                  <div class="item" data-value="cinema">Cinema</div>
-                  <div class="item" data-value="restaurante">Restaurante</div>
-                  <div class="item" data-value="viagem">Viagem</div>
-                  <div class="item" data-value="presentes">Presentes</div>
-                </div>
-              </div>
-              
-        </div>
-        <div class="field">
-          <input type="text" class="money" id="valor" placeholder="Valor" value="0">
+    
+    <button class="ui primary button" id="add-receita">Adicionar Receita</button>
+
+    <h2 class="ui dividing header">Despesas</h2>
+    <table id="despesas-table" class="ui celled table">
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Valor</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    
+    <button class="ui primary button" id="add-despesa">Adicionar Despesa</button>
+
+    <h2 class="ui dividing header">Balanço</h2>
+    <div id="balanco" class="ui large header"></div>
+  </div>
+
+  <!-- Modal para adicionar Receita -->
+  <div id="add-receita-modal" class="ui modal">
+    <div class="header">Adicionar Receita</div>
+    <div class="content">
+      <div class="ui form">
+        <div class="fields">
+          <div class="eight wide field">
+            <input type="text" id="modal-receita-descricao" placeholder="Descrição">
+          </div>
+          <div class="eight wide field">
+            <input type="text" class="money" id="modal-receita-valor" placeholder="Valor">
+          </div>
         </div>
       </div>
     </div>
-    <button class="ui primary button" id="add-despesa">Adicionar Despesa</button>
+    <div class="actions">
+      <div class="ui primary button" id="modal-add-receita">Adicionar</div>
+      <div class="ui button">Cancelar</div>
+    </div>
+  </div>
 
-    <h2 class="ui dividing header">Total de Despesas</h2>
-    <h4 id="total-despesas">R$ 0</h4>
-
-    <h2 class="ui dividing header">Total Disponível</h2>
-    <h4 id="total-disponivel">R$ 0</h4>
+  <!-- Modal para adicionar Despesa -->
+  <div id="add-despesa-modal" class="ui modal">
+    <div class="header">Adicionar Despesa</div>
+    <div class="content">
+      <div class="ui form">
+        <div class="fields">
+          <div class="eight wide field">
+            <input type="text" id="modal-despesa-descricao" placeholder="Descrição">
+          </div>
+          <div class="eight wide field">
+            <input type="text" class="money" id="modal-despesa-valor" placeholder="Valor">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui primary button" id="modal-add-despesa">Adicionar</div>
+      <div class="ui button">Cancelar</div>
+    </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -135,64 +96,152 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
   <script>
-    $(document).ready(function() {
-      $(".money").mask('000.000.000.000.000,00', {reverse: true});
-      $('.ui.dropdown').dropdown();
+    $(document).ready(function () {
+      $('.money').mask('000.000.000.000.000,00', { reverse: true });
 
-      $("#add-despesa").click(function() {
-        var descricao = $("#descricao").val();
-        var valor = parseFloat($("#valor").val().replace(/\./g, "").replace(",", "."));
+      var receitas = [];
+      var despesas = [];
 
-        if (descricao && !isNaN(valor)) {
-          let capitalizeDesc = descricao.substring(0, 1).toUpperCase() + descricao.substring(1);
+      // Adicionar Receita
+      $('#add-receita').on('click', function () {
+        $('#add-receita-modal').modal('show');
+      });
 
-          var row = "<tr><td>" + capitalizeDesc + "</td><td>R$ " + valor.toFixed(2) + "</td><td><button class='ui icon button delete-despesa'><i class='trash alternate outline icon'></i></button></td></tr>";
+      // Adicionar Despesa
+      $('#add-despesa').on('click', function () {
+        $('#add-despesa-modal').modal('show');
+      });
 
-          $("#despesas-table").append(row);
-          $("#descricao").val("");
-          $("#valor").val("");
+      // Adicionar Receita através do modal
+      $('#modal-add-receita').on('click', function () {
+        var descricao = $('#modal-receita-descricao').val();
+        var valor = $('#modal-receita-valor').val();
 
-          calcularTotalDespesas();
-          calcularTotalDisponivel();
+        if (descricao && valor) {
+          var receita = {
+            descricao: descricao,
+            valor: valor
+          };
+
+          receitas.push(receita);
+          renderReceitas();
+          calcularBalanco();
+          $('#modal-receita-descricao').val('');
+          $('#modal-receita-valor').val('');
+          $('#add-receita-modal').modal('hide');
+        } else {
+          alert('Preencha todos os campos!');
         }
       });
 
-      // Adicionar evento de clique para remover despesa
-      $("#despesas-table").on("click", ".delete-despesa", function() {
-        $(this).closest("tr").remove();
-        calcularTotalDespesas();
-        calcularTotalDisponivel();
+      // Adicionar Despesa através do modal
+      $('#modal-add-despesa').on('click', function () {
+        var descricao = $('#modal-despesa-descricao').val();
+        var valor = $('#modal-despesa-valor').val();
+
+        if (descricao && valor) {
+          var despesa = {
+            descricao: descricao,
+            valor: valor
+          };
+
+          despesas.push(despesa);
+          renderDespesas();
+          calcularBalanco();
+          $('#modal-despesa-descricao').val('');
+          $('#modal-despesa-valor').val('');
+          $('#add-despesa-modal').modal('hide');
+        } else {
+          alert('Preencha todos os campos!');
+        }
       });
 
+      // Renderizar Receitas
+      function renderReceitas() {
+        var receitasTable = $('#receitas-table tbody');
+        receitasTable.empty();
 
-      function calcularTotalDespesas() {
-        var totalDespesas = 0;
+        for (var i = 0; i < receitas.length; i++) {
+          var receita = receitas[i];
 
-        $("#despesas-table tr").each(function() {
-          var valorDespesa = parseFloat($(this).find("td:eq(1)").text().replace("R$ ", ""));
-          totalDespesas += valorDespesa;
+          var row = '<tr>' +
+            '<td>' + receita.descricao + '</td>' +
+            '<td>' + receita.valor + '</td>' +
+            '<td><button class="ui negative button excluir-receita" data-index="' + i + '">Excluir</button></td>' +
+            '</tr>';
+
+          receitasTable.append(row);
+        }
+
+        // Adicionar evento de exclusão para os botões de excluir receita
+        $('.excluir-receita').on('click', function () {
+          var index = $(this).data('index');
+          receitas.splice(index, 1);
+          renderReceitas();
+          calcularBalanco();
         });
-
-        $("#total-despesas").text("R$ " + totalDespesas.toFixed(2));
       }
 
-      function calcularTotalDisponivel() {
-        var salario1 = parseFloat($("#salario1").val().replace(/\./g, "").replace(",", ".")) || 0;
-        var salario2 = parseFloat($("#salario2").val().replace(/\./g, "").replace(",", ".")) || 0;
-        var despesasFixas = parseFloat($("#netflix").val().replace(/\./g, "").replace(",", ".")) +
-          parseFloat($("#internet").val().replace(/\./g, "").replace(",", ".")) +
-          parseFloat($("#energia").val().replace(/\./g, "").replace(",", ".")) +
-          parseFloat($("#agua").val().replace(/\./g, "").replace(",", "."));
-        var totalDespesas = parseFloat($("#total-despesas").text().replace("R$ ", ""));
+      // Renderizar Despesas
+      function renderDespesas() {
+        var despesasTable = $('#despesas-table tbody');
+        despesasTable.empty();
 
-        var totalDisponivel = salario1 + salario2 - despesasFixas - totalDespesas;
-        $("#total-disponivel").text("R$ " + totalDisponivel.toFixed(2));
+        for (var i = 0; i < despesas.length; i++) {
+          var despesa = despesas[i];
+
+          var row = '<tr>' +
+            '<td>' + despesa.descricao + '</td>' +
+            '<td>' + despesa.valor + '</td>' +
+            '<td><button class="ui negative button excluir-despesa" data-index="' + i + '">Excluir</button></td>' +
+            '</tr>';
+
+          despesasTable.append(row);
+        }
+
+        // Adicionar evento de exclusão para os botões de excluir despesa
+        $('.excluir-despesa').on('click', function () {
+          var index = $(this).data('index');
+          despesas.splice(index, 1);
+          renderDespesas();
+          calcularBalanco();
+        });
       }
 
-      $(".money").change(function() {
-        calcularTotalDisponivel();
-      });
+      // Calcular Balanço
+      function calcularBalanco() {
+        var totalReceitas = 0;
+        for (var i = 0; i < receitas.length; i++) {
+          totalReceitas += parseFloat(receitas[i].valor.replace(/\./g, "").replace(",", "."));
+        }
+
+        var totalDespesas = 0;
+        for (var i = 0; i < despesas.length; i++) {
+          totalDespesas += parseFloat(despesas[i].valor.replace(/\./g, "").replace(",", "."));
+        }
+
+        var balanco = totalReceitas - totalDespesas;
+        var balancoElement = $('#balanco');
+
+        if (balanco >= 0) {
+          balancoElement.removeClass('red');
+          balancoElement.addClass('green');
+        } else {
+          balancoElement.removeClass('green');
+          balancoElement.addClass('red');
+        }
+
+        balancoElement.text('Balanço: R$ ' + formatCurrency(balanco));
+      }
+
+      // Formatar valor monetário
+      function formatCurrency(value) {
+        var formattedValue = value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        return formattedValue;
+      }
+
     });
   </script>
 </body>
+
 </html>
