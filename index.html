@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gestão Financeira</title>
-  <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">-->
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
-
+  <style>
+    body {
+      padding: 20px;
+    }
+  </style>
 </head>
 <body>
   <div class="ui container" style="margin-top: 50px;">
@@ -12,7 +18,7 @@
 
     <h2 class="ui dividing header">Salários</h2>
     <div class="ui grid">
-      <div class="eight wide column">
+      <div class="eight wide computer sixteen wide mobile column">
         <div class="ui form">
           <div class="field">
             <label>Salário da pessoa 1:</label>
@@ -20,7 +26,7 @@
           </div>
         </div>
       </div>
-      <div class="eight wide column">
+      <div class="eight wide computer sixteen wide mobile column">
         <div class="ui form">
           <div class="field">
             <label>Salário da pessoa 2:</label>
@@ -32,7 +38,7 @@
 
     <h2 class="ui dividing header">Despesas Fixas</h2>
     <div class="ui grid">
-      <div class="four wide column">
+      <div class="four wide computer sixteen wide mobile column">
         <div class="ui form">
           <div class="field">
             <label>Netflix:</label>
@@ -40,7 +46,7 @@
           </div>
         </div>
       </div>
-      <div class="four wide column">
+      <div class="four wide computer sixteen wide mobile column">
         <div class="ui form">
           <div class="field">
             <label>Internet:</label>
@@ -48,7 +54,7 @@
           </div>
         </div>
       </div>
-      <div class="four wide column">
+      <div class="four wide computer sixteen wide mobile column">
         <div class="ui form">
           <div class="field">
             <label>Energia:</label>
@@ -56,7 +62,7 @@
           </div>
         </div>
       </div>
-      <div class="four wide column">
+      <div class="four wide computer sixteen wide mobile column">
         <div class="ui form">
           <div class="field">
             <label>Água:</label>
@@ -129,7 +135,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
   <script>
-  $(document).ready(function() {
+    $(document).ready(function() {
       $(".money").mask('000.000.000.000.000,00', {reverse: true});
       $('.ui.dropdown').dropdown();
 
@@ -138,7 +144,7 @@
         var valor = parseFloat($("#valor").val().replace(/\./g, "").replace(",", "."));
 
         if (descricao && !isNaN(valor)) {
-            let capitalizeDesc = descricao.substring(0, 1).toUpperCase() + descricao.substring(1);
+          let capitalizeDesc = descricao.substring(0, 1).toUpperCase() + descricao.substring(1);
 
           var row = "<tr><td>" + capitalizeDesc + "</td><td>R$ " + valor.toFixed(2) + "</td><td><button class='ui icon button delete-despesa'><i class='trash alternate outline icon'></i></button></td></tr>";
 
@@ -151,14 +157,14 @@
         }
       });
 
-       // Adicionar evento de clique para remover despesa
-       $("#despesas-table").on("click", ".delete-despesa", function() {
+      // Adicionar evento de clique para remover despesa
+      $("#despesas-table").on("click", ".delete-despesa", function() {
         $(this).closest("tr").remove();
         calcularTotalDespesas();
         calcularTotalDisponivel();
       });
 
-      
+
       function calcularTotalDespesas() {
         var totalDespesas = 0;
 
@@ -174,9 +180,9 @@
         var salario1 = parseFloat($("#salario1").val().replace(/\./g, "").replace(",", ".")) || 0;
         var salario2 = parseFloat($("#salario2").val().replace(/\./g, "").replace(",", ".")) || 0;
         var despesasFixas = parseFloat($("#netflix").val().replace(/\./g, "").replace(",", ".")) +
-                            parseFloat($("#internet").val().replace(/\./g, "").replace(",", ".")) +
-                            parseFloat($("#energia").val().replace(/\./g, "").replace(",", ".")) +
-                            parseFloat($("#agua").val().replace(/\./g, "").replace(",", "."));
+          parseFloat($("#internet").val().replace(/\./g, "").replace(",", ".")) +
+          parseFloat($("#energia").val().replace(/\./g, "").replace(",", ".")) +
+          parseFloat($("#agua").val().replace(/\./g, "").replace(",", "."));
         var totalDespesas = parseFloat($("#total-despesas").text().replace("R$ ", ""));
 
         var totalDisponivel = salario1 + salario2 - despesasFixas - totalDespesas;
