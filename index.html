@@ -60,6 +60,12 @@
 
     <h2 class="ui dividing header">Balanço</h2>
     <div id="balanco" class="ui large header segment"></div>
+
+    <button id="limpar-dados" class="ui right floated labeled icon button">
+      <i class="close icon"></i>
+      Limpar Dados
+    </button>
+
   </div>
 
   <!-- Modal para adicionar Receita -->
@@ -129,6 +135,8 @@
       <button type="submit" form="form-despesa" class="ui primary button">Adicionar</button>
       <div class="ui button" id="modal-cancel-despesa">Cancelar</div>
     </div>
+
+
   </div>
 
 
@@ -219,7 +227,7 @@
           $('#form-receita')[0].reset();
 
           calcularBalanco(); // Atualizar balanço após adicionar receita
-         salvarDados(); // Salvar os dados após adicionar receita
+          salvarDados(); // Salvar os dados após adicionar receita
 
         } else {
           alert('Preencha todos os campos!');
@@ -328,6 +336,25 @@
           salvarDados();
         });
       }
+
+      // Evento de clique para o botão "Limpar Dados"
+      $('#limpar-dados').on('click', function () {
+        // Limpar as arrays de receitas e despesas
+        receitas = [];
+        despesas = [];
+
+        // Renderizar as tabelas vazias
+        renderReceitas();
+        renderDespesas();
+
+        // Recalcular o balanço e salvar os dados vazios
+        calcularBalanco();
+        salvarDados();
+
+        localStorage.clear();
+
+      });
+
 
       // Calcular Balanço
       function calcularBalanco() {
