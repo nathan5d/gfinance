@@ -13,6 +13,8 @@
   <style>
     body {
       padding: 20px;
+      padding-bottom: 2rem;
+      height: auto;
     }
   </style>
 </head>
@@ -20,25 +22,23 @@
 <body>
   <div class="ui container">
 
-    <div class="ui primary animated vertical button" id="add-receita" tabindex="0">
-      <div class="visible content"><i class="plus circle icon"></i> Adicionar Receita</div>
-      <div class="hidden content">
-        <div><i class="plus circle icon"></i> Adicionar Receita</div>
-      </div>
-    </div>
-    <div class="ui negative animated vertical button" id="add-despesa" data-content="Add" data-position="top center"
-      tabindex="1">
-      <div class="visible content"><i class="plus circle icon"></i> Adicionar Despesa</div>
-      <div class="hidden content">
-        <div><i class="plus circle icon"></i> Adicionar Despesa</div>
+    <div class="ui buttons">
+      <div class="center aligned column">
+        <button class="ui floated labeled icon green button" id="add-receita">
+          <i class="plus circle icon"></i> Adicionar Receita
+        </button>
+
+
+        <button class="ui floated labeled icon negative button" id="add-despesa">
+          <i class="plus circle icon"></i> Adicionar Despesa
+        </button>
+        <button id="limpar-dados" class="ui right floated labeled icon button">
+          <i class="trash icon"></i>
+          Limpar Dados
+        </button>
       </div>
     </div>
 
-
-    <button id="limpar-dados" class="ui right floated labeled icon button">
-      <i class="trash icon"></i>
-      Limpar Dados
-    </button>
 
 
     <h2 class="ui dividing header">Receitas</h2>
@@ -57,7 +57,7 @@
 
 
     <h2 class="ui dividing header">Despesas</h2>
-    
+
     <table id="despesas-table" class="ui red table">
       <thead>
         <tr>
@@ -79,18 +79,20 @@
       </div>
     </div>
 
-
-    <button id="exportar-excel" class="ui button">Exportar para Excel</button>
-    <div class="ui action input">
-      <label for="importar-excel" class="ui icon button">
-        <i class="upload icon"></i>
-        Importar Excel
-      </label>
-      <input type="file" id="importar-excel" accept=".xlsx, .xls" style="display:none" />
+    <div class="ui buttons">
+      <div class="center aligned column">
+        <button id="exportar-excel" class="ui button green">Exportar para Excel</button>
+        <div class="ui icon button grey">
+          <label for="importar-excel">
+            <i class="upload icon"></i>
+            Importar Excel
+          </label>
+          <input type="file" id="importar-excel" accept=".xlsx, .xls" style="display:none" />
+        </div>
+        <button id="exportar-pdf" class="ui button primary">Exportar para PDF</button>
+      </div>
     </div>
 
-
-    <button id="exportar-pdf" class="ui button">Exportar para PDF</button>
 
 
   </div>
