@@ -253,8 +253,15 @@ $(document).ready(function () {
 
   function exportarParaPDF() {
     // Cria um novo documento PDF
-    window.jsPDF = window.jspdf.jsPDF;
-    var doc = new jsPDF();
+    var doc = new jspdf.jsPDF({
+      left: 20,
+      right: 20,
+      top: 20,
+      bottom: 20
+    });
+
+
+
 
     // Adiciona as tabelas ao documento PDF
     var receitasTable = $('#receitas-table');
@@ -268,8 +275,14 @@ $(document).ready(function () {
     addTableToPDF(doc, despesasTable, 'Tabela de Despesas');
 
     // Adiciona o balanço ao documento PDF
-    doc.text('Balanço', 10, doc.autoTable.previous.finalY + 20);
-    doc.text(balanco.text(), 10, doc.autoTable.previous.finalY + 30);
+
+
+    // Adicionar título da tabela alinhado à direita
+    doc.text('Balanço', doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 20, { align: 'right' });
+
+    // Adicionar texto do balanço alinhado à direita
+    doc.text('R$ ' + balanco.text(), doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 30, { align: 'right' });
+
 
     // Salva o documento PDF
     doc.save('relatorio.pdf');
@@ -283,14 +296,38 @@ $(document).ready(function () {
     // Remove a coluna "Ação" da tabela clonada
     clonedTable.find('th:nth-child(3), td:nth-child(3)').remove();
 
+
+    // Adicionar título da tabela
+    var titleX = doc.internal.pageSize.getWidth() / 2; // Posição X centralizada
+    var titleY = doc.autoTable.previous ? doc.autoTable.previous.finalY + 20 : 20; // Posição Y
+
+    // Centralizar o texto horizontalmente
+    var titleWidth = doc.getTextWidth(title); // Calcular a largura do texto
+    var titleXOffset = titleWidth / 2; // Deslocamento necessário para centralizar
+
     // Adiciona o título ao documento PDF
-    doc.text(title, 10, doc.autoTable.previous ? doc.autoTable.previous.finalY + 20 : 20);
+    doc.text(title, titleX - titleXOffset, titleY);
 
     // Adiciona a tabela clonada ao documento PDF
     doc.autoTable({ html: clonedTable.get(0), startY: doc.autoTable.previous ? doc.autoTable.previous.finalY + 30 : 30 });
 
-
   }
+
+  /*
+  function addTableToPDF(doc, table, tableName, tableTitle) {
+      // Adicionar título da tabela
+      var titleX = doc.internal.pageSize.getWidth() / 2; // Posição X centralizada
+      var titleY = doc.autoTable.previous ? doc.autoTable.previous.finalY + 20 : 20; // Posição Y
+
+      // Centralizar o texto horizontalmente
+      var titleWidth = doc.getTextWidth(tableTitle); // Calcular a largura do texto
+      var titleXOffset = titleWidth / 2; // Deslocamento necessário para centralizar
+
+      doc.text(tableTitle, titleX - titleXOffset, titleY);
+      // Adiciona a tabela clonada ao documento PDF
+      doc.autoTable({ html: clonedTable.get(0), startY: doc.autoTable.previous ? doc.autoTable.previous.finalY + 30 : 30 });
+  }
+  */
 
   // Vincula o evento de clique ao botão "Exportar para PDF"
   $('#exportar-pdf').on('click', exportarParaPDF);
