@@ -8,6 +8,8 @@
   <title>Gestão Financeira</title>
   <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+
+
   <style>
     body {
       padding: 20px;
@@ -17,18 +19,6 @@
 
 <body>
   <div class="ui container">
-    <h2 class="ui dividing header">Receitas</h2>
-    <table id="receitas-table" class="ui celled table">
-      <thead>
-        <tr>
-          <th class="four wide column">Descrição</th>
-          <th class="four wide column">Valor</th>
-          <th class="two wide column">Ação</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
 
     <div class="ui primary animated vertical button" id="add-receita" tabindex="0">
       <div class="visible content"><i class="plus circle icon"></i> Adicionar Receita</div>
@@ -36,21 +26,7 @@
         <div><i class="plus circle icon"></i> Adicionar Receita</div>
       </div>
     </div>
-
-    <h2 class="ui dividing header">Despesas</h2>
-    <table id="despesas-table" class="ui celled table">
-      <thead>
-        <tr>
-          <th class="four wide column">Descrição</th>
-          <th class="four wide column">Valor</th>
-          <th class="two wide column">Ação</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-
-    <div class="ui primary animated vertical button" id="add-despesa" data-content="Add" data-position="top center"
+    <div class="ui negative animated vertical button" id="add-despesa" data-content="Add" data-position="top center"
       tabindex="1">
       <div class="visible content"><i class="plus circle icon"></i> Adicionar Despesa</div>
       <div class="hidden content">
@@ -58,13 +34,64 @@
       </div>
     </div>
 
-    <h2 class="ui dividing header">Balanço</h2>
-    <div id="balanco" class="ui large header segment"></div>
 
     <button id="limpar-dados" class="ui right floated labeled icon button">
-      <i class="close icon"></i>
+      <i class="trash icon"></i>
       Limpar Dados
     </button>
+
+
+    <h2 class="ui dividing header">Receitas</h2>
+    <table id="receitas-table" class="ui green table">
+      <thead class="full-width">
+        <tr>
+          <th class="four wide column">Descrição</th>
+          <th class="four wide column">Valor</th>
+          <th class="collapsing">Ação</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+
+
+
+    <h2 class="ui dividing header">Despesas</h2>
+    
+    <table id="despesas-table" class="ui red table">
+      <thead>
+        <tr>
+          <th class="four wide column">Descrição</th>
+          <th class="four wide column">Valor</th>
+          <th class="collapsing">Ação</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+
+
+    <div class="ui large header segment">
+      Balanço:
+      <div class="ui large header">
+        <span class="ui small">R$ </span>
+        <span id="balanco" class="ui header"></span>
+      </div>
+    </div>
+
+
+    <button id="exportar-excel" class="ui button">Exportar para Excel</button>
+    <div class="ui action input">
+      <label for="importar-excel" class="ui icon button">
+        <i class="upload icon"></i>
+        Importar Excel
+      </label>
+      <input type="file" id="importar-excel" accept=".xlsx, .xls" style="display:none" />
+    </div>
+
+
+    <button id="exportar-pdf" class="ui button">Exportar para PDF</button>
+
 
   </div>
 
@@ -73,19 +100,20 @@
     <div class="header">Adicionar Receita</div>
     <div class="content">
       <form id="form-receita" class="ui form">
-        <div class="fields">
-          <div class="eight wide field">
-            <input type="text" name="modal-receita-descricao" placeholder="Descrição">
-          </div>
-          <div class="eight wide field">
-            <input type="text" class="money" name="modal-receita-valor" placeholder="Valor">
-          </div>
+        <div class="field">
+          <label>Descrição</label>
+          <input type="text" name="modal-receita-descricao" placeholder="Descrição">
+        </div>
+        <div class="field">
+          <label>Valor</label>
+          <input type="text" class="money" name="modal-receita-valor" placeholder="Valor">
         </div>
       </form>
     </div>
     <div class="actions">
-      <button type="submit" form="form-receita" class="ui primary button">Adicionar</button>
-      <div class="ui button" id="modal-cancel-receita">Cancelar</div>
+      <button type="submit" form="form-receita" class="ui positive button">Adicionar</button>
+
+      <div class="ui black deny button">Cancelar</div>
     </div>
   </div>
 
@@ -94,50 +122,23 @@
     <div class="header">Adicionar Despesa</div>
     <div class="content">
       <form id="form-despesa" class="ui form">
-        <div class="fields">
-          <div class="eight wide field">
-            <div class="ui fluid search selection dropdown">
-              <input type="hidden" name="modal-despesa-descricao">
-              <i class="dropdown icon"></i>
-              <div class="default text">Selecione uma despesa</div>
-              <div class="menu">
-                <div class="item" data-value="alimentacao"><i class="utensils icon"></i>Alimentação</div>
-                <div class="item" data-value="transporte"><i class="bus icon"></i>Transporte</div>
-                <div class="item" data-value="moradia"><i class="home icon"></i>Moradia</div>
-                <div class="item" data-value="saude"><i class="medkit icon"></i>Saúde</div>
-                <div class="item" data-value="educacao"><i class="graduation cap icon"></i>Educação</div>
-                <div class="item" data-value="entretenimento"><i class="gamepad icon"></i>Entretenimento</div>
-                <div class="item" data-value="compras"><i class="shopping bag icon"></i>Compras</div>
-                <div class="item" data-value="contas"><i class="file invoice dollar icon"></i>Contas</div>
-                <div class="item" data-value="viagem"><i class="plane icon"></i>Viagem</div>
-                <div class="item" data-value="lazer"><i class="camera retro icon"></i>Lazer</div>
-                <div class="item" data-value="carro"><i class="car icon"></i>Carro</div>
-                <div class="item" data-value="seguro"><i class="shield alternate icon"></i>Seguro</div>
-                <div class="item" data-value="telecomunicacoes"><i class="phone icon"></i>Telecomunicações</div>
-                <div class="item" data-value="impostos"><i class="file alternate icon"></i>Impostos</div>
-                <div class="item" data-value="doacoes"><i class="heart icon"></i>Doações</div>
-                <div class="item" data-value="investimentos"><i class="chart line icon"></i>Investimentos</div>
-                <div class="item" data-value="emergencia"><i class="first aid icon"></i>Emergência</div>
-                <div class="item" data-value="assinaturas"><i class="newspaper icon"></i>Assinaturas</div>
-                <div class="item" data-value="internet"><i class="wifi icon"></i>Internet</div>
-                <div class="item" data-value="outros"><i class="ellipsis horizontal icon"></i>Outros</div>
-              </div>
-            </div>
-
-          </div>
-          <div class="eight wide field">
-            <input type="text" class="money" name="modal-despesa-valor" placeholder="Valor">
-          </div>
+        <div class="field">
+          <label>Descrição</label>
+          <input type="text" name="modal-despesa-descricao" placeholder="Descrição">
+        </div>
+        <div class="field">
+          <label>Valor</label>
+          <input type="text" class="money" name="modal-despesa-valor" placeholder="Valor">
         </div>
       </form>
     </div>
     <div class="actions">
-      <button type="submit" form="form-despesa" class="ui primary button">Adicionar</button>
-      <div class="ui button" id="modal-cancel-despesa">Cancelar</div>
+      <button type="submit" form="form-despesa" class="ui positive button">Adicionar</button>
+
+      <div class="ui black deny button">Cancelar</div>
     </div>
-
-
   </div>
+
 
 
 
@@ -145,260 +146,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
 
-  <script>
-    $(document).ready(function () {
-      $('.money').mask('000.000.000.000.000,00', { reverse: true });
-      $('.ui.dropdown').dropdown();
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
 
-      // Variáveis globais
-      var receitas = [];
-      var despesas = [];
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-      // Função para salvar os dados de receitas e despesas no localStorage
-      function salvarDados() {
-        localStorage.setItem('receitas', JSON.stringify(receitas));
-        localStorage.setItem('despesas', JSON.stringify(despesas));
-      }
-
-
-      // Função para carregar os dados de receitas e despesas do localStorage
-      function carregarDados() {
-        var receitasData = localStorage.getItem('receitas');
-        if (receitasData) {
-          receitas = JSON.parse(receitasData);
-          renderReceitas();
-        }
-
-        var despesasData = localStorage.getItem('despesas');
-        if (despesasData) {
-          despesas = JSON.parse(despesasData);
-          renderDespesas();
-        }
-        calcularBalanco(); // Calcular balanço após carregar os dados
-      }
-
-      // Inicializar os modais com a opção closable: false
-      $('#add-receita-modal').modal({ closable: false });
-      $('#add-despesa-modal').modal({ closable: false });
-
-      // Carregar dados armazenados ao carregar a página
-      carregarDados();
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
 
 
-      // Inicializar os modais com a opção closable: false
-      $('#add-receita-modal').modal({ closable: false });
-      $('#add-despesa-modal').modal({ closable: false });
+  <script src="./app.js"></script>
 
 
-      // Adicionar Receita
-      $('#add-receita').on('click', function () {
-        $('#add-receita-modal').modal('show');
-      });
-
-      // Adicionar Despesa
-      $('#add-despesa').on('click', function () {
-        $('#add-despesa-modal').modal('show');
-      });
-
-      $('#add-despesa').popup();
-
-
-      // Evento de submit para o formulário de Receita
-      $('#form-receita').on('submit', function (e) {
-        e.preventDefault(); // Evita que o formulário seja submetido normalmente
-
-        var descricao = $('[name="modal-receita-descricao"]').val();
-        var valor = $('[name="modal-receita-valor"]').val();
-
-        if (descricao && valor) {
-          var receita = {
-            descricao: descricao,
-            valor: valor
-          };
-
-          receitas.push(receita);
-          renderReceitas();
-          calcularBalanco();
-          $('#modal-receita-descricao').val('');
-          $('#modal-receita-valor').val('');
-          $('#add-receita-modal').modal('hide');
-          // Limpar os campos do formulário
-          $('#form-receita')[0].reset();
-
-          calcularBalanco(); // Atualizar balanço após adicionar receita
-          salvarDados(); // Salvar os dados após adicionar receita
-
-        } else {
-          alert('Preencha todos os campos!');
-        }
-      });
-
-      // Evento de submit para o formulário de Despesa
-      $('#form-despesa').on('submit', function (e) {
-        e.preventDefault(); // Evita que o formulário seja submetido normalmente
-
-        var descricao = $('[name="modal-despesa-descricao"]').val();
-        var valor = $('[name="modal-despesa-valor"]').val();
-
-        if (descricao && valor) {
-          var despesa = {
-            descricao: descricao,
-            valor: valor
-          };
-
-          despesas.push(despesa);
-          renderDespesas();
-          calcularBalanco();
-          $('#modal-despesa-descricao').val('');
-          $('#modal-despesa-valor').val('');
-          $('#add-despesa-modal').modal('hide');
-          // Limpar os campos do formulário
-          $('#form-despesa')[0].reset();
-
-          calcularBalanco(); // Atualizar balanço após adicionar despesa
-          salvarDados(); // Salvar os dados após adicionar despesa
-        } else {
-          alert('Preencha todos os campos!');
-        }
-      });
-
-
-      // Evento de clique para o botão "Cancelar" da modal de Receita
-      $('#modal-cancel-receita').on('click', function () {
-        $('#add-receita-modal').modal('hide');
-      });
-
-      // Evento de clique para o botão "Cancelar" da modal de Despesa
-      $('#modal-cancel-despesa').on('click', function () {
-        $('#add-despesa-modal').modal('hide');
-      });
-
-      // Renderizar Receitas
-      function renderReceitas() {
-        var receitasTable = $('#receitas-table tbody');
-        receitasTable.empty();
-
-        for (var i = 0; i < receitas.length; i++) {
-          var receita = receitas[i];
-
-          var row = '<tr>' +
-            '<td class="four wide column">' + receita.descricao + '</td>' +
-            '<td class="four wide column">' + receita.valor + '</td>' +
-            '<td class="two wide column"><button class="ui negative button excluir-receita" data-index="' + i + '" data-content="Excluir Receita" data-position="top center">Excluir</button></td>' +
-            '</tr>';
-
-          receitasTable.append(row);
-        }
-
-        // Ativar o componente de popup
-        $('.excluir-receita').popup();
-        // Adicionar evento de exclusão para os botões de excluir receita
-        $('.excluir-receita').on('click', function () {
-          var index = $(this).data('index');
-          receitas.splice(index, 1);
-          renderReceitas();
-          calcularBalanco();
-          // Salvar os dados após adicionar receita
-          salvarDados();
-        }).popup({
-          position: 'top center',
-          content: 'Excluir Receita',
-        });
-      }
-
-      // Renderizar Despesas
-      function renderDespesas() {
-        var despesasTable = $('#despesas-table tbody');
-        despesasTable.empty();
-
-        for (var i = 0; i < despesas.length; i++) {
-          var despesa = despesas[i];
-
-          var row = '<tr>' +
-            '<td class="four wide column">' + capitalizeDescription(despesa.descricao) + '</td>' +
-            '<td class="four wide column">' + despesa.valor + '</td>' +
-            '<td class="two wide column"><button class="ui negative button excluir-despesa" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center">Excluir</button></td>' +
-            '</tr>';
-
-          despesasTable.append(row);
-        }
-        // Ativar o componente de popup
-        $('.excluir-despesa').popup();
-
-        // Adicionar evento de exclusão para os botões de excluir despesa
-        $('.excluir-despesa').on('click', function () {
-          var index = $(this).data('index');
-          despesas.splice(index, 1);
-          renderDespesas();
-          calcularBalanco();
-          // Salvar os dados após adicionar receita
-          salvarDados();
-        });
-      }
-
-      // Evento de clique para o botão "Limpar Dados"
-      $('#limpar-dados').on('click', function () {
-        // Limpar as arrays de receitas e despesas
-        receitas = [];
-        despesas = [];
-
-        // Renderizar as tabelas vazias
-        renderReceitas();
-        renderDespesas();
-
-        // Recalcular o balanço e salvar os dados vazios
-        calcularBalanco();
-        salvarDados();
-
-        localStorage.clear();
-
-      });
-
-
-      // Calcular Balanço
-      function calcularBalanco() {
-        var totalReceitas = 0;
-        for (var i = 0; i < receitas.length; i++) {
-          totalReceitas += parseFloat(receitas[i].valor.replace(/\./g, "").replace(",", "."));
-        }
-
-        var totalDespesas = 0;
-        for (var i = 0; i < despesas.length; i++) {
-          totalDespesas += parseFloat(despesas[i].valor.replace(/\./g, "").replace(",", "."));
-        }
-
-        var balanco = totalReceitas - totalDespesas;
-        var balancoElement = $('#balanco');
-
-        if (balanco >= 0) {
-          balancoElement.removeClass('red');
-          balancoElement.addClass('green');
-        } else {
-          balancoElement.removeClass('green');
-          balancoElement.addClass('red');
-        }
-
-        balancoElement.text('Balanço: R$ ' + formatCurrency(balanco));
-      }
-
-      // Formatar valor monetário
-      function formatCurrency(value) {
-        var formattedValue = value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        return formattedValue;
-      }
-
-      // Função para capitalizar a descrição
-      function capitalizeDescription(description) {
-        return description.charAt(0).toUpperCase() + description.slice(1);
-      }
-
-
-
-
-    });
-
-  </script>
 </body>
 
 </html>
