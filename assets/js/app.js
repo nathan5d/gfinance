@@ -322,8 +322,6 @@ $(document).ready(function () {
         var somaReceitas = totalReceitas;
         var somaDespesas = totalDespesas;
       
-       // var balanco = somaReceitas - somaDespesas;
-        $('#balanco').text(balanco.toFixed(2));
       
         // Atualizar as somas das receitas e despesas
         $('#soma-receitas').text(formatCurrency(somaReceitas));
