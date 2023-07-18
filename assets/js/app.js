@@ -23,6 +23,13 @@ $(document).ready(function () {
     // Obter uma referência ao Firestore
     var db = firebase.firestore();
 
+    // Definir o cabeçalho "Origin" nas solicitações ao Firestore
+    db.settings({
+        headers: {
+            'Origin': 'https://amaraldev.com.br'
+        }
+    });
+
     // Função para salvar os dados de receitas e despesas no Firestore
     function salvarDados() {
         db.collection('contas').doc('dados').set({
