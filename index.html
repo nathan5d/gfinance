@@ -60,7 +60,7 @@
 
   <div class="ui container">
 
-    
+
 
 
 
@@ -75,10 +75,7 @@
         <button class="ui floated labeled icon negative button" id="add-despesa">
           <i class="plus circle icon"></i> Despesa
         </button>
-        <button id="limpar-dados" class="ui right floated labeled icon button">
-          <i class="trash icon"></i>
-          Limpar Dados
-        </button>
+
       </div>
     </div>
 
@@ -131,17 +128,25 @@
     </div>
 
 
-    <div class="ui actions">
+    <div class="ui buttons">
       <div class="center aligned column">
-        <button id="exportar-excel" class="ui button green">Exportar Excel</button>
-        <div class="ui icon button grey">
+        <button id="exportar-excel" class="ui tiny button green">Exportar Excel</button>
+        <div class="ui icon tiny button grey">
           <label for="importar-excel">
             <i class="upload icon"></i>
             Importar Excel
           </label>
           <input type="file" id="importar-excel" accept=".xlsx, .xls" style="display:none" />
         </div>
-        <button id="exportar-pdf" class="ui button primary">Salvar PDF</button>
+        <button id="exportar-pdf" class="ui tiny button primary">Salvar PDF</button>
+      </div>
+    </div>
+    <div class="ui actions" style="display: none;">
+      <div class="center aligned column">
+        <button id="limpar-dados" class="ui right floated labeled icon button">
+          <i class="trash icon"></i>
+          Limpar Dados
+        </button>
       </div>
     </div>
 
