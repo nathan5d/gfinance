@@ -335,61 +335,61 @@ $(document).ready(function () {
     }
 
     // Função para salvar os dados de receitas e despesas no Firestore
-function salvarDados() {
-    if (verificarAutenticacao()) {
-      db.collection('contas').doc('dados').set({
-        receitas: receitas,
-        despesas: despesas
-      })
-      .then(function() {
-        console.log("Dados salvos com sucesso!");
-      })
-      .catch(function(error) {
-        console.error("Erro ao salvar os dados: ", error);
-      });
-    } else {
-      console.log("Usuário não autenticado. Ação não permitida.");
-    }
-  }
-  
-  // Função para carregar os dados de receitas e despesas do Firestore
-  function carregarDados() {
-    if (verificarAutenticacao()) {
-      db.collection('contas').doc('dados').get()
-      .then(function(doc) {
-        if (doc.exists) {
-          var data = doc.data();
-          receitas = data.receitas || [];
-          despesas = data.despesas || [];
-          renderReceitas();
-          renderDespesas();
-          calcularBalanco();
+    function salvarDados() {
+        if (verificarAutenticacao()) {
+            db.collection('contas').doc('dados').set({
+                receitas: receitas,
+                despesas: despesas
+            })
+                .then(function () {
+                    console.log("Dados salvos com sucesso!");
+                })
+                .catch(function (error) {
+                    console.error("Erro ao salvar os dados: ", error);
+                });
         } else {
-          console.log("Nenhum documento encontrado. Usando dados vazios.");
+            console.log("Usuário não autenticado. Ação não permitida.");
         }
-      })
-      .catch(function(error) {
-        console.error("Erro ao carregar os dados: ", error);
-      });
-  
-      // Listener em tempo real para a coleção "contas/dados"
-      db.collection('contas').doc('dados').onSnapshot(function(doc) {
-        if (doc.exists) {
-          var data = doc.data();
-          receitas = data.receitas || [];
-          despesas = data.despesas || [];
-          renderReceitas();
-          renderDespesas();
-          calcularBalanco();
-        } else {
-          console.log("Nenhum documento encontrado. Usando dados vazios.");
-        }
-      });
-    } else {
-      console.log("Usuário não autenticado. Ação não permitida.");
     }
-  }
-  
+
+    // Função para carregar os dados de receitas e despesas do Firestore
+    function carregarDados() {
+        if (verificarAutenticacao()) {
+            db.collection('contas').doc('dados').get()
+                .then(function (doc) {
+                    if (doc.exists) {
+                        var data = doc.data();
+                        receitas = data.receitas || [];
+                        despesas = data.despesas || [];
+                        renderReceitas();
+                        renderDespesas();
+                        calcularBalanco();
+                    } else {
+                        console.log("Nenhum documento encontrado. Usando dados vazios.");
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Erro ao carregar os dados: ", error);
+                });
+
+            // Listener em tempo real para a coleção "contas/dados"
+            db.collection('contas').doc('dados').onSnapshot(function (doc) {
+                if (doc.exists) {
+                    var data = doc.data();
+                    receitas = data.receitas || [];
+                    despesas = data.despesas || [];
+                    renderReceitas();
+                    renderDespesas();
+                    calcularBalanco();
+                } else {
+                    console.log("Nenhum documento encontrado. Usando dados vazios.");
+                }
+            });
+        } else {
+            console.log("Usuário não autenticado. Ação não permitida.");
+        }
+    }
+
 
     // Função para exportar os dados para o Firestore
     function exportarParaFirestore() {
@@ -453,17 +453,10 @@ function salvarDados() {
 
 
     // Inicializar os modais com a opção closable: false
-    $('#add-receita-modal').modal({ closable: false });
-    $('#add-despesa-modal').modal({ closable: false });
+    $('.ui.modal').modal({ closable: false });
 
     // Carregar dados armazenados ao carregar a página
     carregarDados();
-
-
-
-    // Inicializar os modais com a opção closable: false
-    $('#add-receita-modal').modal({ closable: false });
-    $('#add-despesa-modal').modal({ closable: false });
 
 
     // Adicionar Receita
@@ -633,7 +626,10 @@ function salvarDados() {
                 '<label></label>' +
                 '</div>' +
                 '</td>' +
-                '<td class="two wide column"><button class="ui negative button excluir-despesa icon" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center"><i class="trash icon"></i></button></td>' +
+                '<td class="two wide column">' +
+                '<button class="ui negative button excluir-despesa icon" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center"><i class="trash icon"></i></button>' +
+                '<button class="ui primary button editar-despesa icon" data-index="' + i + '" data-content="Editar Despesa" data-position="top center"><i class="edit icon"></i></button>' +
+                '</td>' +
                 '</tr>';
 
             despesasTable.append(row);
@@ -646,9 +642,8 @@ function salvarDados() {
             salvarDados();
         });
 
-
         // Ativar o componente de popup
-        $('.excluir-despesa').popup();
+        $('.excluir-despesa, .editar-despesa').popup();
 
         // Adicionar evento de exclusão para os botões de excluir despesa
         $('.excluir-despesa').on('click', function () {
@@ -659,7 +654,45 @@ function salvarDados() {
             // Salvar os dados após adicionar receita
             salvarDados();
         });
+
+        // Adicionar evento de edição para os botões de editar despesa
+        $('.editar-despesa').on('click', function () {
+            var index = $(this).data('index');
+            var despesa = despesas[index];
+
+            // Preencher o modal com os dados da despesa
+            $('#editDescriptionInput').val(despesa.descricao);
+            $('#editValueInput').val(despesa.valor);
+
+            // Abrir o modal de edição
+            $('#editModal').modal('show');
+
+            // Definir a ação do botão de salvar do modal de edição
+            $('#saveEditButton').on('click', function () {
+                var descricao = $('#editDescriptionInput').val();
+                var valor = $('#editValueInput').val();
+
+                // Atualizar os dados da despesa
+                despesa.descricao = descricao;
+                despesa.valor = valor;
+
+                // Renderizar as despesas novamente
+                renderDespesas();
+                calcularBalanco();
+                salvarDados();
+
+                // Fechar o modal de edição
+                $('#editModal').modal('hide');
+            });
+
+            // Definir a ação do botão de cancelar do modal de edição
+            $('#cancelEditButton').on('click', function () {
+                // Fechar o modal de edição sem salvar alterações
+                $('#editModal').modal('hide');
+            });
+        });
     }
+
 
     // Evento de clique para o botão "Limpar Dados"
     $('#limpar-dados').on('click', function () {

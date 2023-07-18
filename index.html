@@ -219,6 +219,30 @@
 
     </div>
 
+
+    <!-- Modal para editar despesas e receitas -->
+    <div class="ui modal" id="editModal">
+      <i class="close icon"></i>
+      <div class="header">Editar Item</div>
+      <div class="content">
+        <div class="ui form">
+          <div class="field">
+            <label>Descrição</label>
+            <input type="text" id="editDescriptionInput" placeholder="Digite a descrição">
+          </div>
+          <div class="field">
+            <label>Valor</label>
+            <input type="text" id="editValueInput" class="money" placeholder="Digite o valor">
+          </div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="ui primary button" id="saveEditButton">Salvar</div>
+        <div class="ui button" id="cancelEditButton">Cancelar</div>
+      </div>
+    </div>
+
+
     <!-- Modal para adicionar Receita -->
     <div id="add-receita-modal" class="ui modal" data-closable="false">
       <div class="header">Adicionar Receita</div>
