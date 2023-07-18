@@ -43,170 +43,238 @@
     <div class="ui grid">
       <div class="two column row">
         <div class="right floated column ui right aligned bottom-20" style="margin-bottom: 20px;">
-          <div id="loginButton" style="display: none;">
-            <button id="loginWithGoogleButton" class="ui red google button right floated">
-              <i class="google icon"></i>
-              Login com Gmail
-            </button>
-          </div>
+
+          <!-- Botão para abrir o modal de login -->
+          <button id="openLoginModal" class="ui  button right floated labeled icon">
+            <i class="user outline icon"></i>
+            Login
+          </button>
+
+          
+         
+
           <div id="userContainer" class="right floated" style="display: none; text-align: right;">
             <span id="userName"></span>
-            <a href="#" id="logoutButton">Sair</a>
+            <button class="circular ui icon button" id="openCreateUpdateModal">
+              <i class="icon settings"></i>
+            </button>
+            <button class="circular ui icon button" id="logoutButton">
+              <i class="icon sign-out"></i>
+            </button>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="ui container">
-
-
-
-
-
-
-    <div class="ui action">
-      <div class="center aligned column">
-        <button class="ui floated labeled icon green button" id="add-receita">
-          <i class="plus circle icon"></i> Receita
-        </button>
-
-
-        <button class="ui floated labeled icon negative button" id="add-despesa">
-          <i class="plus circle icon"></i> Despesa
-        </button>
-
+    <!-- Modal de login -->
+    <div class="ui modal" id="loginModal">
+      <i class="close icon"></i>
+      <div class="header">
+        Faça login
+      </div>
+      <div class="content">
+        <div class="ui form">
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="emailInput" placeholder="Digite seu email">
+          </div>
+          <div class="field">
+            <label>Senha</label>
+            <input type="password" id="passwordInput" placeholder="Digite sua senha">
+          </div>
+          <div class="ui error message" id="loginErrorMessage"></div>
+          <button class="ui primary button" id="emailLoginButton">Login com Email/Senha</button>
+          <div class="ui horizontal divider">OU</div>
+          <button class="ui google plus button" id="googleLoginButton">
+            <i class="google icon"></i>
+            Login com Google
+          </button>
+        </div>
       </div>
     </div>
 
 
+    <div class="ui container">
 
-    <h2 class="ui dividing header">Receitas</h2>
-    <table id="receitas-table" class="ui green table">
-      <thead class="full-width">
-        <tr>
-          <th class="four wide column">Descrição</th>
-          <th class="four wide column">Valor</th>
-          <th class="collapsing">Ação</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+      <!-- Modal de atualização de perfil -->
+      <div class="ui modal" id="createUpdateModal">
+        <i class="close icon"></i>
+        <div class="header">
+          Criação/Atualização de Usuário
+        </div>
+        <div class="content">
+          <div class="ui form">
+            <div class="field">
+              <label>Nome</label>
+              <input type="text" id="newNameInput" placeholder="Digite seu nome">
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input type="email" id="newEmailInput" placeholder="Digite seu email">
+            </div>
+            <div class="field">
+              <label>Senha</label>
+              <input type="password" id="newPasswordInput" placeholder="Digite sua senha">
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="ui primary button" id="createOrUpdateButton" type="submit">Salvar</button>
+          <div class="ui button" id="cancelButton">Cancelar</div>
+        </div>
+      </div>
 
-
-
-
-    <h2 class="ui dividing header">Despesas</h2>
-
-    <table id="despesas-table" class="ui red table">
-      <thead>
-        <tr>
-          <th class="four wide column">Descrição</th>
-          <th class="four wide column">Valor</th>
-          <th class="collapsing">Pago</th>
-          <th class="collapsing">Ação</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-
-    <div class="ui segment">
-      <strong>Soma das Receitas:</strong> R$ <span id="soma-receitas"></span>
     </div>
 
-    <div class="ui segment">
-      <strong>Soma das Despesas:</strong> R$ <span id="soma-despesas"></span>
+    <div class="ui container">
+
+
+
+
+
+
+      <div class="ui action">
+        <div class="center aligned column">
+          <button class="ui floated labeled icon green button" id="add-receita">
+            <i class="plus circle icon"></i> Receita
+          </button>
+
+
+          <button class="ui floated labeled icon negative button" id="add-despesa">
+            <i class="plus circle icon"></i> Despesa
+          </button>
+
+        </div>
+      </div>
+
+
+
+      <h2 class="ui dividing header">Receitas</h2>
+      <table id="receitas-table" class="ui green table">
+        <thead class="full-width">
+          <tr>
+            <th class="four wide column">Descrição</th>
+            <th class="four wide column">Valor</th>
+            <th class="collapsing">Ação</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+
+
+
+      <h2 class="ui dividing header">Despesas</h2>
+
+      <table id="despesas-table" class="ui red table">
+        <thead>
+          <tr>
+            <th class="four wide column">Descrição</th>
+            <th class="four wide column">Valor</th>
+            <th class="collapsing">Pago</th>
+            <th class="collapsing">Ação</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+
+      <div class="ui segment">
+        <strong>Soma das Receitas:</strong> R$ <span id="soma-receitas"></span>
+      </div>
+
+      <div class="ui segment">
+        <strong>Soma das Despesas:</strong> R$ <span id="soma-despesas"></span>
+      </div>
+
+      <div class="ui large segment">
+        Balanço:
+        <div class="ui large header">
+          <span class="ui small">R$ </span>
+          <span id="balanco" class="ui header"></span>
+        </div>
+      </div>
+
+
+      <div class="ui buttons">
+        <div class="center aligned column">
+          <button id="exportar-excel" class="ui tiny button green">Exportar Excel</button>
+          <div class="ui icon tiny button grey">
+            <label for="importar-excel">
+              <i class="upload icon"></i>
+              Importar Excel
+            </label>
+            <input type="file" id="importar-excel" accept=".xlsx, .xls" style="display:none" />
+          </div>
+          <button id="exportar-pdf" class="ui tiny button primary">Salvar PDF</button>
+        </div>
+      </div>
+      <div class="ui actions" style="display: none;">
+        <div class="center aligned column">
+          <button id="limpar-dados" class="ui right floated labeled icon button">
+            <i class="trash icon"></i>
+            Limpar Dados
+          </button>
+        </div>
+      </div>
+
+
+
     </div>
 
-    <div class="ui large segment">
-      Balanço:
-      <div class="ui large header">
-        <span class="ui small">R$ </span>
-        <span id="balanco" class="ui header"></span>
+    <!-- Modal para adicionar Receita -->
+    <div id="add-receita-modal" class="ui modal" data-closable="false">
+      <div class="header">Adicionar Receita</div>
+      <div class="content">
+        <form id="form-receita" class="ui form">
+          <div class="field">
+            <label>Descrição</label>
+            <input type="text" name="modal-receita-descricao" placeholder="Descrição">
+          </div>
+          <div class="field">
+            <label>Valor</label>
+            <input type="text" class="money" name="modal-receita-valor" placeholder="Valor">
+          </div>
+        </form>
+      </div>
+      <div class="actions">
+        <button type="submit" form="form-receita" class="ui positive button">Adicionar</button>
+
+        <div class="ui black deny button">Cancelar</div>
       </div>
     </div>
 
+    <!-- Modal para adicionar Despesa -->
+    <div id="add-despesa-modal" class="ui modal" data-closable="false">
+      <div class="header">Adicionar Despesa</div>
+      <div class="content">
+        <form id="form-despesa" class="ui form">
+          <div class="field">
+            <label>Descrição</label>
+            <input type="text" name="modal-despesa-descricao" placeholder="Descrição">
+          </div>
+          <div class="field">
+            <label>Valor</label>
+            <input type="text" class="money" name="modal-despesa-valor" placeholder="Valor">
+          </div>
+        </form>
+      </div>
+      <div class="actions">
+        <button type="submit" form="form-despesa" class="ui positive button">Adicionar</button>
 
-    <div class="ui buttons">
-      <div class="center aligned column">
-        <button id="exportar-excel" class="ui tiny button green">Exportar Excel</button>
-        <div class="ui icon tiny button grey">
-          <label for="importar-excel">
-            <i class="upload icon"></i>
-            Importar Excel
-          </label>
-          <input type="file" id="importar-excel" accept=".xlsx, .xls" style="display:none" />
-        </div>
-        <button id="exportar-pdf" class="ui tiny button primary">Salvar PDF</button>
+        <div class="ui black deny button">Cancelar</div>
       </div>
     </div>
-    <div class="ui actions" style="display: none;">
-      <div class="center aligned column">
-        <button id="limpar-dados" class="ui right floated labeled icon button">
-          <i class="trash icon"></i>
-          Limpar Dados
-        </button>
-      </div>
-    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 
 
 
-  </div>
-
-  <!-- Modal para adicionar Receita -->
-  <div id="add-receita-modal" class="ui modal" data-closable="false">
-    <div class="header">Adicionar Receita</div>
-    <div class="content">
-      <form id="form-receita" class="ui form">
-        <div class="field">
-          <label>Descrição</label>
-          <input type="text" name="modal-receita-descricao" placeholder="Descrição">
-        </div>
-        <div class="field">
-          <label>Valor</label>
-          <input type="text" class="money" name="modal-receita-valor" placeholder="Valor">
-        </div>
-      </form>
-    </div>
-    <div class="actions">
-      <button type="submit" form="form-receita" class="ui positive button">Adicionar</button>
-
-      <div class="ui black deny button">Cancelar</div>
-    </div>
-  </div>
-
-  <!-- Modal para adicionar Despesa -->
-  <div id="add-despesa-modal" class="ui modal" data-closable="false">
-    <div class="header">Adicionar Despesa</div>
-    <div class="content">
-      <form id="form-despesa" class="ui form">
-        <div class="field">
-          <label>Descrição</label>
-          <input type="text" name="modal-despesa-descricao" placeholder="Descrição">
-        </div>
-        <div class="field">
-          <label>Valor</label>
-          <input type="text" class="money" name="modal-despesa-valor" placeholder="Valor">
-        </div>
-      </form>
-    </div>
-    <div class="actions">
-      <button type="submit" form="form-despesa" class="ui positive button">Adicionar</button>
-
-      <div class="ui black deny button">Cancelar</div>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.14/jspdf.plugin.autotable.min.js"></script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-
-
-
-  <script src="./assets/js/app.js"></script>
+    <script src="./assets/js/app.js"></script>
 
 
 </body>

@@ -24,7 +24,7 @@ $(document).ready(function () {
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
             // Usuário está autenticado
-            document.getElementById("loginButton").style.display = "none";
+            document.getElementById("openLoginModal").style.display = "none";
             document.getElementById("userContainer").style.display = "block";
             document.getElementById("userName").textContent = "Olá " + user.displayName;
 
@@ -32,31 +32,197 @@ $(document).ready(function () {
             carregarDados();
         } else {
             // Usuário não está autenticado
-            document.getElementById("loginButton").style.display = "block";
+            document.getElementById("openLoginModal").style.display = "block";
             document.getElementById("userContainer").style.display = "none";
-            
+
         }
     });
 
     // Obter uma referência ao Firestore
     var db = firebase.firestore();
 
+
+    // Abrir o modal de login ao clicar no botão
+    $('#openLoginModal').on('click', function () {
+        $('#loginModal').modal('show');
+    });
+
+    // Abrir o modal de atualização/ criação de usuario
+    $('#openCreateUpdateModal').on('click', function () {
+        console.log('click')
+        // Chamada à função para preencher os dados ao abrir o modal
+        $('#createUpdateModal').modal('show', function () {
+
+            onShow: {
+                console.log('onSHow')
+                fillUserData();
+            }
+        });
+    });
+
+
+
+    function fillUserData() {
+        var user = firebase.auth().currentUser;
+
+        if (user) {
+            var name = user.displayName;
+            var email = user.email;
+
+            // Preencher os campos de entrada com os dados do usuário
+            document.getElementById('newNameInput').value = name;
+            document.getElementById('newEmailInput').value = email;
+        }
+    }
+
+
+    $('#createOrUpdateButton').on('click', function () {
+
+        // Preencher os campos de entrada com os dados do usuário
+        name = $('#newNameInput').val();
+        email = $('#newEmailInput').val();
+        pwd = $('#newPasswordInput').val();
+
+        createOrUpdateUser(email, pwd, name);
+    })
+    $('#cancelButton').on('click', function () {
+        $('#createUpdateModal').modal('hide');
+    });
+    // Função para criar uma conta com email e senha
+    function createOrUpdateUser(email, senha, nome) {
+        var user = firebase.auth().currentUser;
+
+        // Verificar se a senha está em branco
+        var isSenhaEmBranco = senha === "";
+
+        // Verificar se o usuário já está autenticado
+        if (user) {
+            // Atualizar apenas o nome do usuário se a senha estiver em branco
+            if (isSenhaEmBranco) {
+                user.updateProfile({
+                    displayName: nome
+                })
+                    .then(function () {
+                        console.log("Nome do usuário atualizado com sucesso!");
+                    })
+                    .catch(function (error) {
+                        console.error("Erro ao atualizar o nome do usuário: ", error);
+                    });
+            } else {
+                // Atualizar o email e senha do usuário
+                user.updateEmail(email)
+                    .then(function () {
+                        // Atualizar apenas a senha do usuário
+                        if (!isSenhaEmBranco) {
+                            user.updatePassword(senha)
+                                .then(function () {
+                                    console.log("Email e senha do usuário atualizados com sucesso!");
+                                })
+                                .catch(function (error) {
+                                    console.error("Erro ao atualizar a senha do usuário: ", error);
+                                });
+                        }
+                    })
+                    .catch(function (error) {
+                        console.error("Erro ao atualizar o email do usuário: ", error);
+                    });
+            }
+        } else {
+            // Criar uma conta com email e senha
+            firebase.auth().createUserWithEmailAndPassword(email, senha)
+                .then(function (userCredential) {
+                    user = userCredential.user;
+
+                    // Atualizar o nome do usuário no perfil do Firebase Authentication
+                    user.updateProfile({
+                        displayName: nome
+                    })
+                        .then(function () {
+                            console.log("Usuário criado e nome atualizado com sucesso!");
+
+                            // Salvar o nome do usuário no Firestore
+                            db.collection('users').doc(user.uid).set({
+                                name: nome,
+                                email: user.email
+                                // Outras informações do usuário que você deseja salvar
+                            })
+                                .then(function () {
+                                    console.log("Nome do usuário salvo no Firestore com sucesso!");
+                                })
+                                .catch(function (error) {
+                                    console.error("Erro ao salvar o nome do usuário no Firestore: ", error);
+                                });
+
+                            // Resto do código de redirecionamento ou ações adicionais após criar a conta
+                        })
+                        .catch(function (error) {
+                            console.error("Erro ao atualizar o nome do usuário: ", error);
+                        });
+                })
+                .catch(function (error) {
+                    console.error("Erro ao criar conta: ", error);
+                });
+        }
+    }
+
+
+
+    // Função para fazer login com email/senha
+    function loginWithEmail() {
+        var email = $('#emailInput').val();
+        var password = $('#passwordInput').val();
+
+        // Autenticar com email/senha usando o Firebase Authentication
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(function (userCredential) {
+                // Login bem-sucedido, redirecionar ou executar ações adicionais
+                console.log('Usuário logado:', userCredential.user);
+                $('#loginModal').modal('hide');
+            })
+            .catch(function (error) {
+                // Tratar erros de login
+                $('#loginErrorMessage').text(error.message);
+            });
+    }
+
     // Função para fazer login com a conta do Google
     function loginWithGoogle() {
         var provider = new firebase.auth.GoogleAuthProvider();
+
+        // Autenticar com a conta do Google usando o Firebase Authentication
         firebase.auth().signInWithPopup(provider)
-            .then(function (result) {
-                // O usuário fez login com sucesso
-                var user = result.user;
-                console.log("Usuário logado:", user.displayName);
-                // Você pode redirecionar para outra página ou executar ações adicionais aqui
-                // Chamar as funções que exigem autenticação do usuário, se necessário
+            .then(function (userCredential) {
+                // Login bem-sucedido, redirecionar ou executar ações adicionais
+                console.log('Usuário logado:', userCredential.user);
+                $('#loginModal').modal('hide');
             })
             .catch(function (error) {
-                // Ocorreu um erro ao fazer login
-                console.error("Erro ao fazer login:", error);
+                // Tratar erros de login
+                console.error('Erro ao fazer login com o Google:', error);
             });
     }
+
+    // Adicionar evento de clique para o botão de login com email/senha
+    $('#emailLoginButton').on('click', loginWithEmail);
+
+    // Adicionar evento de clique para o botão de login com Google
+    $('#googleLoginButton').on('click', loginWithGoogle);
+    // Função para fazer login com a conta do Google
+    /* function loginWithGoogle() {
+         var provider = new firebase.auth.GoogleAuthProvider();
+         firebase.auth().signInWithPopup(provider)
+             .then(function (result) {
+                 // O usuário fez login com sucesso
+                 var user = result.user;
+                 console.log("Usuário logado:", user.displayName);
+                 // Você pode redirecionar para outra página ou executar ações adicionais aqui
+                 // Chamar as funções que exigem autenticação do usuário, se necessário
+             })
+             .catch(function (error) {
+                 // Ocorreu um erro ao fazer login
+                 console.error("Erro ao fazer login:", error);
+             });
+     }*/
     // Função para fazer logout do usuário
     function logout() {
         firebase.auth().signOut()
@@ -66,7 +232,7 @@ $(document).ready(function () {
                 // Interromper a conexão com o Firestore
                 //db.terminate();
 
-            location.reload(); // Atualizar a página
+                location.reload(); // Atualizar a página
                 // Você pode redirecionar para a página de login ou executar outras ações necessárias
             })
             .catch(function (error) {
