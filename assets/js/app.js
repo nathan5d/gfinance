@@ -6,28 +6,117 @@ $(document).ready(function () {
     var receitas = [];
     var despesas = [];
 
-    // Função para salvar os dados de receitas e despesas no localStorage
+
+    // Configurar as credenciais do Firebase
+    var firebaseConfig = {
+        apiKey: "AIzaSyC1DegxDNN099jZjsnN2YBWZuE6u_gG16Y",
+        authDomain: "fincontrol-3b9fa.firebaseapp.com",
+        projectId: "fincontrol-3b9fa",
+        storageBucket: "fincontrol-3b9fa.appspot.com",
+        messagingSenderId: "521919064536",
+        appId: "1:521919064536:web:f861260fd1031887ebeaad"
+    };
+
+    // Inicializar o Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Obter uma referência ao Firestore
+    var db = firebase.firestore();
+
+    // Função para salvar os dados de receitas e despesas no Firestore
     function salvarDados() {
-        localStorage.setItem('receitas', JSON.stringify(receitas));
-        localStorage.setItem('despesas', JSON.stringify(despesas));
+        db.collection('contas').doc('dados').set({
+            receitas: receitas,
+            despesas: despesas
+        })
+            .then(function () {
+                console.log("Dados salvos com sucesso!");
+            })
+            .catch(function (error) {
+                console.error("Erro ao salvar os dados: ", error);
+            });
     }
 
-
-    // Função para carregar os dados de receitas e despesas do localStorage
+    // Função para carregar os dados de receitas e despesas do Firestore
     function carregarDados() {
-        var receitasData = localStorage.getItem('receitas');
-        if (receitasData) {
-            receitas = JSON.parse(receitasData);
-            renderReceitas();
-        }
-
-        var despesasData = localStorage.getItem('despesas');
-        if (despesasData) {
-            despesas = JSON.parse(despesasData);
-            renderDespesas();
-        }
-        calcularBalanco(); // Calcular balanço após carregar os dados
+        db.collection('contas').doc('dados').get()
+            .then(function (doc) {
+                if (doc.exists) {
+                    var data = doc.data();
+                    receitas = data.receitas || [];
+                    despesas = data.despesas || [];
+                    renderReceitas();
+                    renderDespesas();
+                    calcularBalanco();
+                } else {
+                    console.log("Nenhum documento encontrado. Usando dados vazios.");
+                }
+            })
+            .catch(function (error) {
+                console.error("Erro ao carregar os dados: ", error);
+            });
     }
+
+    // Função para exportar os dados para o Firestore
+    function exportarParaFirestore() {
+        db.collection('contas').doc('dados').set({
+            receitas: receitas,
+            despesas: despesas
+        })
+            .then(function () {
+                console.log("Dados exportados para o Firestore com sucesso!");
+            })
+            .catch(function (error) {
+                console.error("Erro ao exportar os dados para o Firestore: ", error);
+            });
+    }
+
+    // Função para importar os dados do Firestore
+    function importarDoFirestore() {
+        db.collection('contas').doc('dados').get()
+            .then(function (doc) {
+                if (doc.exists) {
+                    var data = doc.data();
+                    receitas = data.receitas || [];
+                    despesas = data.despesas || [];
+                    renderReceitas();
+                    renderDespesas();
+                    calcularBalanco();
+                    salvarDados();
+                } else {
+                    console.log("Nenhum documento encontrado para importação.");
+                }
+            })
+            .catch(function (error) {
+                console.error("Erro ao importar os dados do Firestore: ", error);
+            });
+    }
+
+
+    /*
+        // Função para carregar os dados de receitas e despesas do localStorage
+        function carregarDados() {
+            var receitasData = localStorage.getItem('receitas');
+            if (receitasData) {
+                receitas = JSON.parse(receitasData);
+                renderReceitas();
+            }
+    
+            var despesasData = localStorage.getItem('despesas');
+            if (despesasData) {
+                despesas = JSON.parse(despesasData);
+                renderDespesas();
+            }
+            calcularBalanco(); // Calcular balanço após carregar os dados
+        }
+        // Função para salvar os dados de receitas e despesas no localStorage
+        function salvarDados() {
+            localStorage.setItem('receitas', JSON.stringify(receitas));
+            localStorage.setItem('despesas', JSON.stringify(despesas));
+        }
+    */
+
+
 
     // Inicializar os modais com a opção closable: false
     $('#add-receita-modal').modal({ closable: false });
@@ -321,8 +410,8 @@ $(document).ready(function () {
 
         var somaReceitas = totalReceitas;
         var somaDespesas = totalDespesas;
-      
-      
+
+
         // Atualizar as somas das receitas e despesas
         $('#soma-receitas').text(formatCurrency(somaReceitas));
         $('#soma-despesas').text(formatCurrency(somaDespesas));
@@ -351,18 +440,14 @@ $(document).ready(function () {
         var doc = new jspdf.jsPDF({
             left: 20,
             right: 20,
-            top: 20,
-            bottom: 20
+            top: 60,
+            bottom: 60
         });
-
-
-
 
         // Adiciona as tabelas ao documento PDF
         var receitasTable = $('#receitas-table');
         var despesasTable = $('#despesas-table');
         var balanco = $('#balanco');
-
 
         // Adiciona a tabela de receitas ao documento PDF
         addTableToPDF(doc, receitasTable, 'Tabela de Receitas');
@@ -370,36 +455,40 @@ $(document).ready(function () {
         // Adiciona a tabela de despesas ao documento PDF
         addTableToPDF(doc, despesasTable, 'Tabela de Despesas');
 
-        // Adiciona o balanço ao documento PDF
 
-
+        doc.setFont(undefined, 'bold')
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
-        doc.text('Balanço', doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 20, { align: 'right' });
+        doc.text('Balanço', doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 10, { align: 'right' });
 
-        // Adicionar texto do balanço alinhado à direita
-        doc.text('R$ ' + balanco.text(), doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 30, { align: 'right' });
+        doc.text('R$: ' + balanco.text(), doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 20, { align: 'right' });
+
 
 
         // Adicionar número de página no rodapé e cabeçalho
-        // Adicionar número de página no rodapé e cabeçalho
+
         var pageCount = doc.internal.getNumberOfPages();
         for (var i = 1; i <= pageCount; i++) {
             doc.setPage(i);
+            doc.setFont(undefined, 'normal')
             doc.setFontSize(8);
             doc.setTextColor(0, 0, 0);
             doc.text('Página ' + i.toString() + ' de ' + pageCount.toString(), doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
 
             // Adicionar cabeçalho na primeira página
             if (i === 1) {
+                doc.setFont(undefined, 'normal')
                 doc.setFontSize(12);
-                doc.setTextColor(255, 0, 0);
-                doc.text('', doc.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
+                doc.setTextColor(100, 100, 100);
+                doc.text('Gestão Financeira', doc.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
             }
         }
 
         // Salva o documento PDF
         doc.save('relatorio.pdf');
     }
+
 
     // Função auxiliar para adicionar uma tabela ao documento PDF
     function addTableToPDF(doc, table, title) {
