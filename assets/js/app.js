@@ -315,7 +315,7 @@ $(document).ready(function () {
             var row = '<tr>' +
                 '<td class="four wide column">' + receita.descricao + '</td>' +
                 '<td class="four wide column">' + receita.valor + '</td>' +
-                '<td class="two wide column"><button class="ui negative button excluir-receita" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button></td>' +
+                '<td class="two wide column"><button class="ui negative button excluir-receita icon" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button></td>' +
                 '</tr>';
 
             receitasTable.append(row);
@@ -386,7 +386,7 @@ $(document).ready(function () {
                 '<label></label>' +
                 '</div>' +
                 '</td>' +
-                '<td class="two wide column"><button class="ui negative button excluir-despesa" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center"><i class="trash icon"></i></button></td>' +
+                '<td class="two wide column"><button class="ui negative button excluir-despesa icon" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center"><i class="trash icon"></i></button></td>' +
                 '</tr>';
 
             despesasTable.append(row);
