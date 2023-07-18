@@ -171,6 +171,9 @@ $(document).ready(function () {
                 })
                     .then(function () {
                         console.log("Nome do usuário atualizado com sucesso!");
+
+                        // Fecha o modal
+                        $('#createUpdateModal').modal('hide');
                     })
                     .catch(function (error) {
                         console.error("Erro ao atualizar o nome do usuário: ", error);
@@ -184,6 +187,8 @@ $(document).ready(function () {
                             user.updatePassword(senha)
                                 .then(function () {
                                     console.log("Email e senha do usuário atualizados com sucesso!");
+                                    // Fecha o modal
+                                    $('#createUpdateModal').modal('hide');
                                 })
                                 .catch(function (error) {
                                     console.error("Erro ao atualizar a senha do usuário: ", error);
@@ -220,7 +225,8 @@ $(document).ready(function () {
                                     console.error("Erro ao salvar o nome do usuário no Firestore: ", error);
                                 });
 
-                            // Resto do código de redirecionamento ou ações adicionais após criar a conta
+                            // Fecha o modal
+                            $('#createUpdateModal').modal('hide');
                         })
                         .catch(function (error) {
                             console.error("Erro ao atualizar o nome do usuário: ", error);
