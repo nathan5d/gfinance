@@ -20,49 +20,129 @@ $(document).ready(function () {
     // Inicializar o Firebase
     firebase.initializeApp(firebaseConfig);
 
-    // Obter uma referência ao Firestore
-    var db = firebase.firestore();
+    // Verificar o estado de autenticação do usuário ao carregar a página
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // Usuário está autenticado
+            document.getElementById("loginButton").style.display = "none";
+            document.getElementById("userContainer").style.display = "block";
+            document.getElementById("userName").textContent = "Olá " + user.displayName;
 
-    // Definir o cabeçalho "Origin" nas solicitações ao Firestore
-    db.settings({
-        headers: {
-            'Origin': 'https://amaraldev.com.br'
+            // Carregar os dados apenas se o usuário estiver logado
+            carregarDados();
+        } else {
+            // Usuário não está autenticado
+            document.getElementById("loginButton").style.display = "block";
+            document.getElementById("userContainer").style.display = "none";
+            
         }
     });
 
-    // Função para salvar os dados de receitas e despesas no Firestore
-    function salvarDados() {
-        db.collection('contas').doc('dados').set({
-            receitas: receitas,
-            despesas: despesas
-        })
-            .then(function () {
-                console.log("Dados salvos com sucesso!");
+    // Obter uma referência ao Firestore
+    var db = firebase.firestore();
+
+    // Função para fazer login com a conta do Google
+    function loginWithGoogle() {
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider)
+            .then(function (result) {
+                // O usuário fez login com sucesso
+                var user = result.user;
+                console.log("Usuário logado:", user.displayName);
+                // Você pode redirecionar para outra página ou executar ações adicionais aqui
+                // Chamar as funções que exigem autenticação do usuário, se necessário
             })
             .catch(function (error) {
-                console.error("Erro ao salvar os dados: ", error);
+                // Ocorreu um erro ao fazer login
+                console.error("Erro ao fazer login:", error);
             });
+    }
+    // Função para fazer logout do usuário
+    function logout() {
+        firebase.auth().signOut()
+            .then(function () {
+                // O usuário fez logout com sucesso
+                console.log("Usuário deslogado");
+                // Interromper a conexão com o Firestore
+                //db.terminate();
+
+            location.reload(); // Atualizar a página
+                // Você pode redirecionar para a página de login ou executar outras ações necessárias
+            })
+            .catch(function (error) {
+                // Ocorreu um erro ao fazer logout
+                console.error("Erro ao fazer logout:", error);
+            });
+    }
+
+    // Adicione um evento de clique ao botão de logout
+    $("#logoutButton").on("click", function (e) {
+
+        e.preventDefault();
+        logout();
+    });
+
+    // Adicione um evento de clique ao botão de login com o Google
+    $("#loginWithGoogleButton").on("click", loginWithGoogle);
+
+
+    // Verificar se o usuário está autenticado
+    function verificarAutenticacao() {
+        var user = firebase.auth().currentUser;
+        if (user) {
+            // Usuário está autenticado
+            console.log("Usuário autenticado. Ação permitida.");
+            //carregarDados;
+            return true;
+        } else {
+            // Usuário não está autenticado
+            console.log("Usuário não autenticado. Ação não permitida.");
+            return false;
+        }
+    }
+
+    // Função para salvar os dados de receitas e despesas no Firestore
+    function salvarDados() {
+        if (verificarAutenticacao()) {
+            db.collection('contas').doc('dados').set({
+                receitas: receitas,
+                despesas: despesas
+            })
+                .then(function () {
+                    console.log("Dados salvos com sucesso!");
+                })
+                .catch(function (error) {
+                    console.error("Erro ao salvar os dados: ", error);
+                });
+        } else {
+            console.log("Usuário não autenticado. Ação não permitida.");
+        }
     }
 
     // Função para carregar os dados de receitas e despesas do Firestore
     function carregarDados() {
-        db.collection('contas').doc('dados').get()
-            .then(function (doc) {
-                if (doc.exists) {
-                    var data = doc.data();
-                    receitas = data.receitas || [];
-                    despesas = data.despesas || [];
-                    renderReceitas();
-                    renderDespesas();
-                    calcularBalanco();
-                } else {
-                    console.log("Nenhum documento encontrado. Usando dados vazios.");
-                }
-            })
-            .catch(function (error) {
-                console.error("Erro ao carregar os dados: ", error);
-            });
+        if (verificarAutenticacao()) {
+            db.collection('contas').doc('dados').get()
+                .then(function (doc) {
+                    if (doc.exists) {
+                        var data = doc.data();
+                        receitas = data.receitas || [];
+                        despesas = data.despesas || [];
+                        renderReceitas();
+                        renderDespesas();
+                        calcularBalanco();
+                    } else {
+                        console.log("Nenhum documento encontrado. Usando dados vazios.");
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Erro ao carregar os dados: ", error);
+                });
+        } else {
+            console.log("Usuário não autenticado. Ação não permitida.");
+        }
     }
+
 
     // Função para exportar os dados para o Firestore
     function exportarParaFirestore() {

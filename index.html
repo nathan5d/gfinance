@@ -23,7 +23,9 @@
 
 
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 
 
@@ -38,6 +40,30 @@
 
 <body>
   <div class="ui container">
+    <div class="ui grid">
+      <div class="two column row">
+        <div class="right floated column ui right aligned bottom-20" style="margin-bottom: 20px;">
+          <div id="loginButton" style="display: none;">
+            <button id="loginWithGoogleButton" class="ui red google button right floated">
+              <i class="google icon"></i>
+              Login com Gmail
+            </button>
+          </div>
+          <div id="userContainer" class="right floated" style="display: none; text-align: right;">
+            <span id="userName"></span>
+            <a href="#" id="logoutButton">Sair</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ui container">
+
+    
+
+
+
 
     <div class="ui action">
       <div class="center aligned column">
