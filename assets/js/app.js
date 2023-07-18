@@ -41,6 +41,73 @@ $(document).ready(function () {
     // Obter uma referência ao Firestore
     var db = firebase.firestore();
 
+    /*
+    * REAL TIME
+    */
+
+    // Referência para a coleção "receitas"
+    var receitasRef = db.collection('contas').doc('dados').collection('receitas');
+
+    // Listener em tempo real para a coleção "receitas"
+    receitasRef.onSnapshot(function (snapshot) {
+        snapshot.docChanges().forEach(function (change) {
+            var receita = change.doc.data();
+            if (change.type === 'added') {
+                receitas.push(receita);
+            } else if (change.type === 'modified') {
+                var index = receitas.findIndex(function (item) {
+                    return item.id === receita.id;
+                });
+                if (index !== -1) {
+                    receitas[index] = receita;
+                }
+            } else if (change.type === 'removed') {
+                var index = receitas.findIndex(function (item) {
+                    return item.id === receita.id;
+                });
+                if (index !== -1) {
+                    receitas.splice(index, 1);
+                }
+            }
+        });
+
+        // Atualizar a UI com as receitas atualizadas
+        renderReceitas();
+    });
+
+    // Referência para a coleção "despesas"
+    var despesasRef = db.collection('contas').doc('dados').collection('despesas');
+
+    // Listener em tempo real para a coleção "despesas"
+    despesasRef.onSnapshot(function (snapshot) {
+        snapshot.docChanges().forEach(function (change) {
+            var despesa = change.doc.data();
+            if (change.type === 'added') {
+                despesas.push(despesa);
+            } else if (change.type === 'modified') {
+                var index = despesas.findIndex(function (item) {
+                    return item.id === despesa.id;
+                });
+                if (index !== -1) {
+                    despesas[index] = despesa;
+                }
+            } else if (change.type === 'removed') {
+                var index = despesas.findIndex(function (item) {
+                    return item.id === despesa.id;
+                });
+                if (index !== -1) {
+                    despesas.splice(index, 1);
+                }
+            }
+        });
+
+        // Atualizar a UI com as despesas atualizadas
+        renderDespesas();
+    });
+    /*
+    * END REALTIME
+    */
+
 
     // Abrir o modal de login ao clicar no botão
     $('#openLoginModal').on('click', function () {
@@ -268,47 +335,61 @@ $(document).ready(function () {
     }
 
     // Função para salvar os dados de receitas e despesas no Firestore
-    function salvarDados() {
-        if (verificarAutenticacao()) {
-            db.collection('contas').doc('dados').set({
-                receitas: receitas,
-                despesas: despesas
-            })
-                .then(function () {
-                    console.log("Dados salvos com sucesso!");
-                })
-                .catch(function (error) {
-                    console.error("Erro ao salvar os dados: ", error);
-                });
-        } else {
-            console.log("Usuário não autenticado. Ação não permitida.");
-        }
+function salvarDados() {
+    if (verificarAutenticacao()) {
+      db.collection('contas').doc('dados').set({
+        receitas: receitas,
+        despesas: despesas
+      })
+      .then(function() {
+        console.log("Dados salvos com sucesso!");
+      })
+      .catch(function(error) {
+        console.error("Erro ao salvar os dados: ", error);
+      });
+    } else {
+      console.log("Usuário não autenticado. Ação não permitida.");
     }
-
-    // Função para carregar os dados de receitas e despesas do Firestore
-    function carregarDados() {
-        if (verificarAutenticacao()) {
-            db.collection('contas').doc('dados').get()
-                .then(function (doc) {
-                    if (doc.exists) {
-                        var data = doc.data();
-                        receitas = data.receitas || [];
-                        despesas = data.despesas || [];
-                        renderReceitas();
-                        renderDespesas();
-                        calcularBalanco();
-                    } else {
-                        console.log("Nenhum documento encontrado. Usando dados vazios.");
-                    }
-                })
-                .catch(function (error) {
-                    console.error("Erro ao carregar os dados: ", error);
-                });
+  }
+  
+  // Função para carregar os dados de receitas e despesas do Firestore
+  function carregarDados() {
+    if (verificarAutenticacao()) {
+      db.collection('contas').doc('dados').get()
+      .then(function(doc) {
+        if (doc.exists) {
+          var data = doc.data();
+          receitas = data.receitas || [];
+          despesas = data.despesas || [];
+          renderReceitas();
+          renderDespesas();
+          calcularBalanco();
         } else {
-            console.log("Usuário não autenticado. Ação não permitida.");
+          console.log("Nenhum documento encontrado. Usando dados vazios.");
         }
+      })
+      .catch(function(error) {
+        console.error("Erro ao carregar os dados: ", error);
+      });
+  
+      // Listener em tempo real para a coleção "contas/dados"
+      db.collection('contas').doc('dados').onSnapshot(function(doc) {
+        if (doc.exists) {
+          var data = doc.data();
+          receitas = data.receitas || [];
+          despesas = data.despesas || [];
+          renderReceitas();
+          renderDespesas();
+          calcularBalanco();
+        } else {
+          console.log("Nenhum documento encontrado. Usando dados vazios.");
+        }
+      });
+    } else {
+      console.log("Usuário não autenticado. Ação não permitida.");
     }
-
+  }
+  
 
     // Função para exportar os dados para o Firestore
     function exportarParaFirestore() {
