@@ -26,7 +26,7 @@ $(document).ready(function () {
             // Usuário está autenticado
             document.getElementById("openLoginModal").style.display = "none";
             document.getElementById("userContainer").style.display = "block";
-            document.getElementById("userName").textContent = "Olá " + user.displayName;
+            document.getElementById("userName").textContent = "Olá, " + user.displayName +' ';
 
             // Carregar os dados apenas se o usuário estiver logado
             carregarDados();

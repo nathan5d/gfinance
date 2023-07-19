@@ -5,8 +5,18 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Controle Financeiro">
-  <title>Gestão Financeira</title>
+  <title>FinControl - Gestão Financeira</title>
+  <meta name="description" content="Seu aplicativo financeiro para controle de receitas e despesas. Mantenha suas finanças organizadas e acompanhe seu balanço.">
+  
+  
+  <!-- Metatags Open Graph -->
+  <meta property="og:title" content="FinControl">
+  <meta property="og:description" content="Seu aplicativo financeiro para controle de receitas e despesas. Mantenha suas finanças organizadas e acompanhe seu balanço.">
+  <meta property="og:image" content="https://example.com/app-icon.png"> <!-- URL para o ícone do seu aplicativo -->
+  <meta property="og:url" content="https://example.com">
+  <meta property="og:type" content="website">
+  <link rel="shortcut icon" href="./assets/img/favicon.png" type="image/x-icon">
+
   <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
 
@@ -40,26 +50,35 @@
 </head>
 
 <body>
+ 
   <div class="ui container">
+    
+    <div class="ui center aligned header">
+      <img class="ui image" src="./assets/img/logo.png" style="width: 15rem;">
+    </div>
+
+    <div class="ui right aligned header">
+      <div class="column ui right aligned bottom-20" style="margin-bottom: 20px;">
+
+        <!-- Botão para abrir o modal de login -->
+        <button id="openLoginModal" class="ui  button labeled icon">
+          <i class="icon user outline"></i>
+          Login
+        </button>
+        <div id="userContainer" class="" style="display: none;">
+          <small><span id="userName"></span></small>
+          <button class="circular ui icon button" id="openCreateUpdateModal">
+            <i class="icon user outline"></i>
+          </button>
+          <button class="circular ui icon button" id="logoutButton">
+            <i class="icon sign-out"></i>
+          </button>
+        </div>
+      </div>
+    </div>
     <div class="ui grid">
       <div class="one column row">
-        <div class="right floated column ui right aligned bottom-20" style="margin-bottom: 20px;">
-
-          <!-- Botão para abrir o modal de login -->
-          <button id="openLoginModal" class="ui  button right floated labeled icon">
-            <i class="icon user outline"></i>
-            Login
-          </button>
-          <div id="userContainer" class="right floated" style="display: none; text-align: right;">
-            <span id="userName"></span>
-            <button class="circular ui icon button" id="openCreateUpdateModal">
-              <i class="icon user outline"></i>
-            </button>
-            <button class="circular ui icon button" id="logoutButton">
-              <i class="icon sign-out"></i>
-            </button>
-          </div>
-        </div>
+        
       </div>
     </div>
 
@@ -129,19 +148,17 @@
 
 
 
+    
 
-      <div class="ui action">
-        <div class="center aligned column">
-          <button class="ui floated labeled icon green button" id="add-receita">
-            <i class="plus circle icon"></i> Receita
-          </button>
-
-
-          <button class="ui floated labeled icon negative button" id="add-despesa">
-            <i class="plus circle icon"></i> Despesa
-          </button>
-
-        </div>
+      <div class="ui large buttons">
+        <button class="ui labeled icon button green" id="add-receita">
+          <i class="plus circle icon"></i> Receita
+        </button>
+        <div class="or"></div>
+        <button class="ui right labeled icon button negative" id="add-despesa">
+          Despesa
+          <i class="right plus circle icon"></i> 
+        </button>
       </div>
 
 
