@@ -562,6 +562,8 @@ $(document).ready(function () {
                 '<td class="four wide column">' + receita.descricao + '</td>' +
                 '<td class="four wide column">' + receita.valor + '</td>' +
                 '<td class="two wide column">'+
+                '<button class="ui primary circular button editar-receita icon" data-index="' + i + '" data-content="Editar Despesa" data-position="top center"><i class="edit icon"></i></button>' +
+                
                 '<button class="ui negative circular mini button excluir-receita icon" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button>'+
                 '</td>' +
                 '</tr>';
@@ -593,6 +595,43 @@ $(document).ready(function () {
         }).popup({
             position: 'top center',
             content: 'Excluir Receita',
+        });
+
+         // Adicionar evento de edição para os botões de editar despesa
+         $('.editar-receita').on('click', function () {
+            var index = $(this).data('index');
+            var despesa = despesas[index];
+
+            // Preencher o modal com os dados da despesa
+            $('#editDescriptionInput').val(despesa.descricao);
+            $('#editValueInput').val(despesa.valor);
+
+            // Abrir o modal de edição
+            $('#editModal').modal('show');
+
+            // Definir a ação do botão de salvar do modal de edição
+            $('#saveEditButton').on('click', function () {
+                var descricao = $('#editDescriptionInput').val();
+                var valor = $('#editValueInput').val();
+
+                // Atualizar os dados da despesa
+                receita.descricao = descricao;
+                receita.valor = valor;
+
+                // Renderizar as despesas novamente
+                renderReceitas();
+                calcularBalanco();
+                salvarDados();
+
+                // Fechar o modal de edição
+                $('#editModal').modal('hide');
+            });
+
+            // Definir a ação do botão de cancelar do modal de edição
+            $('#cancelEditButton').on('click', function () {
+                // Fechar o modal de edição sem salvar alterações
+                $('#editModal').modal('hide');
+            });
         });
     }
 
