@@ -600,7 +600,7 @@ $(document).ready(function () {
          // Adicionar evento de edição para os botões de editar receita
          $('.editar-receita').on('click', function () {
             var index = $(this).data('index');
-            var receita = receita[index];
+            var receita = receitas[index];
 
             // Preencher o modal com os dados da despesa
             $('#editDescriptionInput').val(receita.descricao);
