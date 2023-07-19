@@ -26,7 +26,7 @@ $(document).ready(function () {
             // Usuário está autenticado
             document.getElementById("openLoginModal").style.display = "none";
             document.getElementById("userContainer").style.display = "inline-block";
-            document.getElementById("userName").textContent = "Olá, " + user.displayName +' ';
+            document.getElementById("userName").textContent = "Olá, " + user.displayName + ' ';
 
             // Carregar os dados apenas se o usuário estiver logado
             carregarDados();
@@ -561,7 +561,9 @@ $(document).ready(function () {
             var row = '<tr>' +
                 '<td class="four wide column">' + receita.descricao + '</td>' +
                 '<td class="four wide column">' + receita.valor + '</td>' +
-                '<td class="two wide column"><button class="ui negative button excluir-receita icon" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button></td>' +
+                '<td class="two wide column">'+
+                '<button class="ui negative circular mini button excluir-despesa icon" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button>'+
+                '</td>' +
                 '</tr>';
 
             receitasTable.append(row);
@@ -572,11 +574,22 @@ $(document).ready(function () {
         // Adicionar evento de exclusão para os botões de excluir receita
         $('.excluir-receita').on('click', function () {
             var index = $(this).data('index');
-            receitas.splice(index, 1);
-            renderReceitas();
-            calcularBalanco();
-            // Salvar os dados após adicionar receita
-            salvarDados();
+            var despesa = receitas[index];
+
+            // Exibir o modal de confirmação de exclusão
+            $('#confirmDeleteModal')
+                .modal({
+                    closable: false,
+                    onApprove: function () {
+                        // Confirmado, realizar a exclusão do item
+                        receitas.splice(index, 1);
+                        renderDespesas();
+                        calcularBalanco();
+                        // Salvar os dados após a exclusão da despesa
+                        salvarDados();
+                    },
+                })
+                .modal('show');
         }).popup({
             position: 'top center',
             content: 'Excluir Receita',
@@ -633,8 +646,8 @@ $(document).ready(function () {
                 '</div>' +
                 '</td>' +
                 '<td class="two wide column">' +
-                '<button class="ui negative button excluir-despesa icon" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center"><i class="trash icon"></i></button>' +
-                '<button class="ui primary button editar-despesa icon" data-index="' + i + '" data-content="Editar Despesa" data-position="top center"><i class="edit icon"></i></button>' +
+                '<button class="ui primary circular button editar-despesa icon" data-index="' + i + '" data-content="Editar Despesa" data-position="top center"><i class="edit icon"></i></button>' +
+                '<button class="ui negative circular mini button excluir-despesa icon" data-index="' + i + '" data-content="Excluir Despesa" data-position="top center"><i class="trash icon"></i></button>' +
                 '</td>' +
                 '</tr>';
 
@@ -651,15 +664,28 @@ $(document).ready(function () {
         // Ativar o componente de popup
         $('.excluir-despesa, .editar-despesa').popup();
 
+       
         // Adicionar evento de exclusão para os botões de excluir despesa
         $('.excluir-despesa').on('click', function () {
             var index = $(this).data('index');
-            despesas.splice(index, 1);
-            renderDespesas();
-            calcularBalanco();
-            // Salvar os dados após adicionar receita
-            salvarDados();
+            var despesa = despesas[index];
+
+            // Exibir o modal de confirmação de exclusão
+            $('#confirmDeleteModal')
+                .modal({
+                    closable: false,
+                    onApprove: function () {
+                        // Confirmado, realizar a exclusão do item
+                        despesas.splice(index, 1);
+                        renderDespesas();
+                        calcularBalanco();
+                        // Salvar os dados após a exclusão da despesa
+                        salvarDados();
+                    },
+                })
+                .modal('show');
         });
+
 
         // Adicionar evento de edição para os botões de editar despesa
         $('.editar-despesa').on('click', function () {
