@@ -597,14 +597,14 @@ $(document).ready(function () {
             content: 'Excluir Receita',
         });
 
-         // Adicionar evento de edição para os botões de editar despesa
+         // Adicionar evento de edição para os botões de editar receita
          $('.editar-receita').on('click', function () {
             var index = $(this).data('index');
-            var despesa = despesas[index];
+            var receita = receita[index];
 
             // Preencher o modal com os dados da despesa
-            $('#editDescriptionInput').val(despesa.descricao);
-            $('#editValueInput').val(despesa.valor);
+            $('#editDescriptionInput').val(receita.descricao);
+            $('#editValueInput').val(receita.valor);
 
             // Abrir o modal de edição
             $('#editModal').modal('show');
