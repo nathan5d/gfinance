@@ -901,17 +901,17 @@ $(document).ready(function () {
 
 
         // Adiciona a tabela de receitas ao documento PDF
-        addTableToPDF(doc, receitasTable, 'Tabela de Receitas', startY);
+        addTableToPDF(doc, receitasTable, 'Receitas', startY);
 
         // Atualizar a posição inicial startY para a próxima tabela
         startY = doc.autoTable.previous.finalY + 20;
 
         // Adiciona a tabela de despesas ao documento PDF
-        addTableToPDF(doc, despesasTable, 'Tabela de Despesas', startY);
+        addTableToPDF(doc, despesasTable, 'Despesas', startY);
 
 
         doc.setFont(undefined, 'bold')
-        doc.setFontSize(10);
+        doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
         doc.text('Balanço', doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 10, { align: 'right' });
@@ -993,6 +993,10 @@ $(document).ready(function () {
             var titleY = startY - 10; // Espaçamento entre a tabela anterior e o título
 
             // Adiciona o título ao documento PDF
+            doc.setFont(undefined, 'bold')
+            doc.setFontSize(14);
+            
+            doc.setTextColor(0, 0, 0);
             doc.text(title, titleX - titleXOffset, titleY);
         }
 
@@ -1079,7 +1083,7 @@ $(document).ready(function () {
 
         // Concatenar a data formatada ao nome do arquivo
         var nomeArquivo = 'balanco_' + dataArquivo + '.xlsx';
-        
+
         // Salvar o arquivo XLSX com o nome contendo a data atual
         XLSX.writeFile(wb, nomeArquivo);
     }
