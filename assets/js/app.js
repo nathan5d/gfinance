@@ -562,7 +562,7 @@ $(document).ready(function () {
                 '<td class="four wide column">' + receita.descricao + '</td>' +
                 '<td class="four wide column">' + receita.valor + '</td>' +
                 '<td class="two wide column">'+
-                '<button class="ui negative circular mini button excluir-despesa icon" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button>'+
+                '<button class="ui negative circular mini button excluir-receita icon" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button>'+
                 '</td>' +
                 '</tr>';
 
@@ -583,7 +583,7 @@ $(document).ready(function () {
                     onApprove: function () {
                         // Confirmado, realizar a exclusão do item
                         receitas.splice(index, 1);
-                        renderDespesas();
+                        renderReceitas();
                         calcularBalanco();
                         // Salvar os dados após a exclusão da despesa
                         salvarDados();
