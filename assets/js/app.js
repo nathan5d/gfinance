@@ -834,12 +834,17 @@ $(document).ready(function () {
         // balancoElement.text(formatCurrency(balanco));
 
         var balanco = totalReceitas - totalDespesasPagas;
+        var spanBalanco = balancoElement.parent().find('span');
         if (balanco >= 0) {
-            balancoElement.removeClass('red');
-            balancoElement.addClass('green');
+            
+            spanBalanco.removeClass('red').addClass('green');
+
+            //balancoElement.removeClass('red');
+            //balancoElement.addClass('green');
         } else {
-            balancoElement.removeClass('green');
-            balancoElement.addClass('red');
+            spanBalanco.removeClass('green').addClass('red');
+            //balancoElement.removeClass('green');
+            //balancoElement.addClass('red');
         }
 
 
