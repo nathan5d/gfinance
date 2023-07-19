@@ -561,10 +561,10 @@ $(document).ready(function () {
             var row = '<tr>' +
                 '<td class="four wide column">' + receita.descricao + '</td>' +
                 '<td class="four wide column">' + receita.valor + '</td>' +
-                '<td class="two wide column">'+
+                '<td class="two wide column">' +
                 '<button class="ui primary circular button editar-receita icon" data-index="' + i + '" data-content="Editar Despesa" data-position="top center"><i class="edit icon"></i></button>' +
-                
-                '<button class="ui negative circular mini button excluir-receita icon" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button>'+
+
+                '<button class="ui negative circular mini button excluir-receita icon" data-index="' + i + '" data-content="Excluir Receita" data-position="top center"><i class="trash icon"></i></button>' +
                 '</td>' +
                 '</tr>';
 
@@ -597,8 +597,8 @@ $(document).ready(function () {
             content: 'Excluir Receita',
         });
 
-         // Adicionar evento de edição para os botões de editar receita
-         $('.editar-receita').on('click', function () {
+        // Adicionar evento de edição para os botões de editar receita
+        $('.editar-receita').on('click', function () {
             var index = $(this).data('index');
             var receita = receitas[index];
 
@@ -703,7 +703,7 @@ $(document).ready(function () {
         // Ativar o componente de popup
         $('.excluir-despesa, .editar-despesa').popup();
 
-       
+
         // Adicionar evento de exclusão para os botões de excluir despesa
         $('.excluir-despesa').on('click', function () {
             var index = $(this).data('index');
@@ -882,16 +882,32 @@ $(document).ready(function () {
             bottom: 60
         });
 
+        doc.setFont('helvetica');
+
+        // Armazenar a data de geração do arquivo
+        var dataGeracao = moment().format('DD/MM/YYYY HH:mm:ss');
+
+
         // Adiciona as tabelas ao documento PDF
         var receitasTable = $('#receitas-table');
         var despesasTable = $('#despesas-table');
         var balanco = $('#balanco');
 
+        // Adicionar título da tabela apenas na primeira tabela
+        var title = 'Materiais';
+
+        // Definir a posição inicial da primeira tabela
+        var startY = 30;
+
+
         // Adiciona a tabela de receitas ao documento PDF
-        addTableToPDF(doc, receitasTable, 'Tabela de Receitas');
+        addTableToPDF(doc, receitasTable, 'Tabela de Receitas', startY);
+
+        // Atualizar a posição inicial startY para a próxima tabela
+        startY = doc.autoTable.previous.finalY + 20;
 
         // Adiciona a tabela de despesas ao documento PDF
-        addTableToPDF(doc, despesasTable, 'Tabela de Despesas');
+        addTableToPDF(doc, despesasTable, 'Tabela de Despesas', startY);
 
 
         doc.setFont(undefined, 'bold')
@@ -911,7 +927,7 @@ $(document).ready(function () {
             doc.setPage(i);
             doc.setFont(undefined, 'normal')
             doc.setFontSize(8);
-            doc.setTextColor(0, 0, 0);
+            doc.setTextColor(100, 100, 100);
             doc.text('Página ' + i.toString() + ' de ' + pageCount.toString(), doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
 
             // Adicionar cabeçalho na primeira página
@@ -921,49 +937,66 @@ $(document).ready(function () {
                 doc.setTextColor(100, 100, 100);
                 doc.text('Gestão Financeira', doc.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
             }
+
+            // Adicionar data de geração do arquivo no canto
+            doc.setFont(undefined, 'normal');
+            doc.setFontSize(8);
+            doc.setTextColor(100, 100, 100);
+            doc.text('Gerado em: ' + dataGeracao, doc.internal.pageSize.getWidth() - 20, 10, { align: 'right' });
+
         }
 
-        // Salva o documento PDF
-        doc.save('relatorio.pdf');
+        // Formatar a data no formato "DD-MM-YYYY"
+        var dataArquivo = moment().format('DD-MM-YYYY');
+
+        // Concatenar a data formatada ao nome do arquivo
+        var nomeArquivo = 'balanco_' + dataArquivo + '.pdf';
+        // Salvar o arquivo PDF com o nome contendo a data atual
+        doc.save(nomeArquivo);
     }
 
 
     // Função auxiliar para adicionar uma tabela ao documento PDF
-    function addTableToPDF(doc, table, title) {
+    function addTableToPDF(doc, table, title, startY = 30, showTitle = true) {
         // Clona a tabela original para não modificar a tabela na página
         var clonedTable = table.clone();
 
-        // Verifica se a tabela é a tabela "Receitas" ou a primeira tabela
+        // Verifica se a tabela é a tabela "QtdeMateriais" ou a primeira tabela
         var isFirstTable = clonedTable.is(':first-child');
-        var isReceitasTable = clonedTable.find('th:first-child').text().trim() === 'Descrição' &&
+        var isQtdeMateriaisTable = clonedTable.find('th:first-child').text().trim() === 'Descrição' &&
             clonedTable.find('th:nth-child(2)').text().trim() === 'Valor' &&
             clonedTable.find('th:nth-child(3)').text().trim() === 'Ação';
 
-        if (isReceitasTable && isFirstTable) {
+        if (isQtdeMateriaisTable && isFirstTable) {
             // Remove a coluna "Ação" da tabela clonada
             clonedTable.find('th:nth-child(3), td:nth-child(3)').remove();
         }
 
-        // Verifica se a tabela é a tabela "Despesas"
-        var isDespesasTable = clonedTable.find('th:first-child').text().trim() === 'Descrição' &&
+        // Verifica se a tabela é a tabela "PesoMateriais"
+        var isPesoMateriaisTable = clonedTable.find('th:first-child').text().trim() === 'Descrição' &&
             clonedTable.find('th:nth-child(2)').text().trim() === 'Valor' &&
             clonedTable.find('th:nth-child(3)').text().trim() === 'Pago';
 
-        if (isDespesasTable) {
+        if (isPesoMateriaisTable) {
             // Remove a coluna "Ação" da tabela clonada
             clonedTable.find('th:nth-child(4), td:nth-child(4)').remove();
         }
+        if (showTitle) {
+            // Centralizar o texto horizontalmente
+            var titleWidth = doc.getTextWidth(title); // Calcular a largura do texto
+            var titleXOffset = titleWidth / 2; // Deslocamento necessário para centralizar
 
-        // Adicionar título da tabela
-        var titleX = doc.internal.pageSize.getWidth() / 2; // Posição X centralizada
-        var titleY = doc.autoTable.previous ? doc.autoTable.previous.finalY + 20 : 20; // Posição Y
+            // Declare titleX here
+            var titleX = doc.internal.pageSize.getWidth() / 2; // Posição X centralizada
 
-        // Centralizar o texto horizontalmente
-        var titleWidth = doc.getTextWidth(title); // Calcular a largura do texto
-        var titleXOffset = titleWidth / 2; // Deslocamento necessário para centralizar
+            // Ajustar a posição Y do título com base na tabela anterior ou no topo da página
+            var titleY = startY - 10; // Espaçamento entre a tabela anterior e o título
 
-        // Adiciona o título ao documento PDF
-        doc.text(title, titleX - titleXOffset, titleY);
+            // Adiciona o título ao documento PDF
+            doc.text(title, titleX - titleXOffset, titleY);
+        }
+
+
 
         // Mapear o cabeçalho da tabela clonada
         var headers = [];
@@ -977,7 +1010,7 @@ $(document).ready(function () {
             var row = [];
             $(this).find('td').each(function (index) {
                 var cellText = $(this).text().trim();
-                if (isDespesasTable && index === 2) {
+                if (isPesoMateriaisTable && index === 2) {
                     // Obter o valor do checkbox
                     var isChecked = $(this).find('input[type="checkbox"]').is(':checked');
                     // Converter valor em Sim ou Não
@@ -992,7 +1025,7 @@ $(document).ready(function () {
 
         // Configurar as opções da tabela
         var tableOptions = {
-            startY: doc.autoTable.previous ? doc.autoTable.previous.finalY + 30 : 30,
+            startY: startY, // Usar a posição inicial recebida como parâmetro
             headStyles: {
                 fillColor: [240, 240, 240], // Define a cor do cabeçalho como whitesmoke
                 textColor: [0, 0, 0]
@@ -1007,23 +1040,6 @@ $(document).ready(function () {
 
     }
 
-
-
-    /*
-    function addTableToPDF(doc, table, tableName, tableTitle) {
-        // Adicionar título da tabela
-        var titleX = doc.internal.pageSize.getWidth() / 2; // Posição X centralizada
-        var titleY = doc.autoTable.previous ? doc.autoTable.previous.finalY + 20 : 20; // Posição Y
-  
-        // Centralizar o texto horizontalmente
-        var titleWidth = doc.getTextWidth(tableTitle); // Calcular a largura do texto
-        var titleXOffset = titleWidth / 2; // Deslocamento necessário para centralizar
-  
-        doc.text(tableTitle, titleX - titleXOffset, titleY);
-        // Adiciona a tabela clonada ao documento PDF
-        doc.autoTable({ html: clonedTable.get(0), startY: doc.autoTable.previous ? doc.autoTable.previous.finalY + 30 : 30 });
-    }
-    */
 
     // Vincula o evento de clique ao botão "Exportar para PDF"
     $('#exportar-pdf').on('click', exportarParaPDF);
@@ -1058,7 +1074,14 @@ $(document).ready(function () {
         var dadosSheet = XLSX.utils.aoa_to_sheet(dados.concat(balancoData));
         XLSX.utils.book_append_sheet(wb, dadosSheet, "Dados");
 
-        XLSX.writeFile(wb, "relatorio.xlsx");
+        // Formatar a data no formato "DD-MM-YYYY"
+        var dataArquivo = moment().format('DD-MM-YYYY');
+
+        // Concatenar a data formatada ao nome do arquivo
+        var nomeArquivo = 'balanco_' + dataArquivo + '.xlsx';
+        
+        // Salvar o arquivo XLSX com o nome contendo a data atual
+        XLSX.writeFile(wb, nomeArquivo);
     }
 
 
