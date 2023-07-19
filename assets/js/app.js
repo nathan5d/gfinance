@@ -963,21 +963,21 @@ $(document).ready(function () {
 
         // Verifica se a tabela é a tabela "QtdeMateriais" ou a primeira tabela
         var isFirstTable = clonedTable.is(':first-child');
-        var isQtdeMateriaisTable = clonedTable.find('th:first-child').text().trim() === 'Descrição' &&
+        var isReceitasTable = clonedTable.find('th:first-child').text().trim() === 'Descrição' &&
             clonedTable.find('th:nth-child(2)').text().trim() === 'Valor' &&
             clonedTable.find('th:nth-child(3)').text().trim() === 'Ação';
 
-        if (isQtdeMateriaisTable && isFirstTable) {
+        if (isReceitasTable && isFirstTable) {
             // Remove a coluna "Ação" da tabela clonada
             clonedTable.find('th:nth-child(3), td:nth-child(3)').remove();
         }
 
         // Verifica se a tabela é a tabela "PesoMateriais"
-        var isPesoMateriaisTable = clonedTable.find('th:first-child').text().trim() === 'Descrição' &&
+        var isDespesasTable = clonedTable.find('th:first-child').text().trim() === 'Descrição' &&
             clonedTable.find('th:nth-child(2)').text().trim() === 'Valor' &&
             clonedTable.find('th:nth-child(3)').text().trim() === 'Pago';
 
-        if (isPesoMateriaisTable) {
+        if (isDespesasTable) {
             // Remove a coluna "Ação" da tabela clonada
             clonedTable.find('th:nth-child(4), td:nth-child(4)').remove();
         }
@@ -1014,7 +1014,7 @@ $(document).ready(function () {
             var row = [];
             $(this).find('td').each(function (index) {
                 var cellText = $(this).text().trim();
-                if (isPesoMateriaisTable && index === 2) {
+                if (isDespesasTable && index === 2) {
                     // Obter o valor do checkbox
                     var isChecked = $(this).find('input[type="checkbox"]').is(':checked');
                     // Converter valor em Sim ou Não
