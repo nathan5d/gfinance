@@ -53,28 +53,28 @@
  
   <div class="ui container">
     
-    <div class="ui center aligned header">
+    <div class="ui center aligned  header">
       <img class="ui image" src="./assets/img/logo.png" style="width: 15rem;">
     </div>
 
-    <div class="ui right aligned header">
-      <div class="column ui right aligned bottom-20" style="margin-bottom: 20px;">
+    <div class="ui right aligned  header">
+      <div class="ui bottom-20" style="margin-bottom: 20px;">
 
-        <!-- Botão para abrir o modal de login -->
-        <button id="openLoginModal" class="ui  button labeled icon">
-          <i class="icon user outline"></i>
-          Login
-        </button>
-        <div id="userContainer" class="" style="display: none;">
-          <small><span id="userName"></span></small>
-          <button class="circular ui icon button" id="openCreateUpdateModal">
+          <!-- Botão para abrir o modal de login -->
+          <button id="openLoginModal" class="ui button m-auto">
             <i class="icon user outline"></i>
+            Login
           </button>
-          <button class="circular ui icon button" id="logoutButton">
-            <i class="icon sign-out"></i>
-          </button>
+          <div id="userContainer" class="right floated" style="display: none; text-align: right;">
+            <span id="userName"></span>
+            <button class="circular ui icon button" id="openCreateUpdateModal">
+              <i class="icon user outline"></i>
+            </button>
+            <button class="circular ui icon button" id="logoutButton">
+              <i class="icon sign-out"></i>
+            </button>
+          </div>
         </div>
-      </div>
     </div>
     <div class="ui grid">
       <div class="one column row">

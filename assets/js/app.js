@@ -25,14 +25,14 @@ $(document).ready(function () {
         if (user) {
             // Usuário está autenticado
             document.getElementById("openLoginModal").style.display = "none";
-            document.getElementById("userContainer").style.display = "block";
+            document.getElementById("userContainer").style.display = "inline-block";
             document.getElementById("userName").textContent = "Olá, " + user.displayName +' ';
 
             // Carregar os dados apenas se o usuário estiver logado
             carregarDados();
         } else {
             // Usuário não está autenticado
-            document.getElementById("openLoginModal").style.display = "block";
+            document.getElementById("openLoginModal").style.display = "inline-block";
             document.getElementById("userContainer").style.display = "none";
 
         }
