@@ -916,7 +916,7 @@ $(document).ready(function () {
 
         // Adicionar a imagem centralizada no cabeçalho da primeira página
         var imgURL = './assets/img/logo.png'; // Ajuste o caminho da imagem conforme necessário
-        var imgWidth = 60; // Largura da imagem em mm
+        var imgWidth = 50; // Largura da imagem em mm
         var headerX = doc.internal.pageSize.getWidth() / 2 - imgWidth / 2; // Posição X para centralizar a imagem
         //var headerX = 15; // Posição X para centralizar a imagem
         var headerY = 5; // Posição Y para ajustar a altura da imagem
