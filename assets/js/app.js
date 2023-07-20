@@ -836,7 +836,7 @@ $(document).ready(function () {
         var balanco = totalReceitas - totalDespesasPagas;
         var spanBalanco = balancoElement.parent().find('span');
         if (balanco >= 0) {
-            
+
             spanBalanco.removeClass('red').addClass('green');
 
             //balancoElement.removeClass('red');
@@ -872,12 +872,7 @@ $(document).ready(function () {
         return description.charAt(0).toUpperCase() + description.slice(1);
     }
 
-
     // Função para exportar o conteúdo para PDF
-
-
-    // Função para exportar o conteúdo para PDF
-
     function exportarParaPDF() {
         // Cria um novo documento PDF
         var doc = new jspdf.jsPDF({
@@ -892,18 +887,15 @@ $(document).ready(function () {
         // Armazenar a data de geração do arquivo
         var dataGeracao = moment().format('DD/MM/YYYY HH:mm:ss');
 
-
         // Adiciona as tabelas ao documento PDF
         var receitasTable = $('#receitas-table');
         var despesasTable = $('#despesas-table');
         var balanco = $('#balanco');
 
-        // Adicionar título da tabela apenas na primeira tabela
-        var title = 'Materiais';
+
 
         // Definir a posição inicial da primeira tabela
-        var startY = 30;
-
+        var startY = 40;
 
         // Adiciona a tabela de receitas ao documento PDF
         addTableToPDF(doc, receitasTable, 'Receitas', startY);
@@ -914,51 +906,80 @@ $(document).ready(function () {
         // Adiciona a tabela de despesas ao documento PDF
         addTableToPDF(doc, despesasTable, 'Despesas', startY);
 
-
-        doc.setFont(undefined, 'bold')
+        doc.setFont(undefined, 'bold');
         doc.setFontSize(12);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
-        doc.text('Balanço', doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 10, { align: 'right' });
+        doc.text('Balanço', doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 10, { align: 'right' });
 
-        doc.text('R$ ' + balanco.text(), doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 20, { align: 'right' });
+        doc.text('R$ ' + balanco.text(), doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 20, { align: 'right' });
 
+        // Adicionar a imagem centralizada no cabeçalho da primeira página
+        var imgURL = './assets/img/logo.png'; // Ajuste o caminho da imagem conforme necessário
+        var imgWidth = 60; // Largura da imagem em mm
+        var headerX = doc.internal.pageSize.getWidth() / 2 - imgWidth / 2; // Posição X para centralizar a imagem
+        //var headerX = 15; // Posição X para centralizar a imagem
+        var headerY = 5; // Posição Y para ajustar a altura da imagem
 
-
-        // Adicionar número de página no rodapé e cabeçalho
-
-        var pageCount = doc.internal.getNumberOfPages();
-        for (var i = 1; i <= pageCount; i++) {
-            doc.setPage(i);
-            doc.setFont(undefined, 'normal')
-            doc.setFontSize(8);
-            doc.setTextColor(100, 100, 100);
-            doc.text('Página ' + i.toString() + ' de ' + pageCount.toString(), doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
-
-            // Adicionar cabeçalho na primeira página
-            if (i === 1) {
-                doc.setFont(undefined, 'normal')
-                doc.setFontSize(12);
-                doc.setTextColor(100, 100, 100);
-                doc.text('Gestão Financeira', doc.internal.pageSize.getWidth() / 2, 10, { align: 'center' });
-            }
-
-            // Adicionar data de geração do arquivo no canto
-            doc.setFont(undefined, 'normal');
-            doc.setFontSize(8);
-            doc.setTextColor(100, 100, 100);
-            doc.text('Gerado em: ' + dataGeracao, doc.internal.pageSize.getWidth() - 20, 10, { align: 'right' });
-
+        // Função para converter a URL da imagem em data URL
+        function toDataURL(url, callback) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                var reader = new FileReader();
+                reader.onloadend = function () {
+                    callback(reader.result);
+                };
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+            xhr.responseType = 'blob';
+            xhr.send();
         }
 
-        // Formatar a data no formato "DD-MM-YYYY"
-        var dataArquivo = moment().format('DD-MM-YYYY');
+        // Carregar a imagem usando a função toDataURL
+        toDataURL(imgURL, function (dataURL) {
+            // Carregamento da imagem concluído, continuar com o processamento do PDF
+            // Add the image to the PDF
+            var img = new Image();
+            img.onload = function () {
+                var aspectRatio = img.width / img.height;
+                var imgHeight = imgWidth / aspectRatio; // Calcula a altura proporcional com base na largura desejada
 
-        // Concatenar a data formatada ao nome do arquivo
-        var nomeArquivo = 'balanco_' + dataArquivo + '.pdf';
-        // Salvar o arquivo PDF com o nome contendo a data atual
-        doc.save(nomeArquivo);
+
+                // Adicionar número de página no rodapé e cabeçalho
+                var pageCount = doc.internal.getNumberOfPages();
+                for (var i = 1; i <= pageCount; i++) {
+                    doc.setPage(i);
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(8);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text('Página ' + i.toString() + ' de ' + pageCount.toString(), doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+
+                    // Adicionar cabeçalho na primeira página
+                    if (i === 1) {
+                        doc.addImage(dataURL, 'PNG', headerX, headerY, imgWidth, imgHeight);
+                    }
+
+                    // Adicionar data de geração do arquivo no canto
+                    doc.setFont(undefined, 'normal');
+                    doc.setFontSize(8);
+                    doc.setTextColor(100, 100, 100);
+                    doc.text('Gerado em: ' + dataGeracao, doc.internal.pageSize.getWidth() - 15, 10, { align: 'right' });
+                }
+
+                // Formatar a data no formato "DD-MM-YYYY"
+                var dataArquivo = moment().format('DD-MM-YYYY');
+
+                // Concatenar a data formatada ao nome do arquivo
+                var nomeArquivo = 'balanco_' + dataArquivo + '.pdf';
+
+                // Salvar o arquivo PDF com o nome contendo a data atual
+                doc.save(nomeArquivo);
+            };
+            img.src = imgURL;
+        }, null, { crossOrigin: true });
     }
+
 
 
     // Função auxiliar para adicionar uma tabela ao documento PDF
@@ -1000,7 +1021,7 @@ $(document).ready(function () {
             // Adiciona o título ao documento PDF
             doc.setFont(undefined, 'bold')
             doc.setFontSize(14);
-            
+
             doc.setTextColor(0, 0, 0);
             doc.text(title, titleX - titleXOffset, titleY);
         }
