@@ -921,7 +921,7 @@ $(document).ready(function () {
         // Adicionar título da tabela alinhado à direita
         doc.text('Balanço', doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 10, { align: 'right' });
 
-        doc.text('R$: ' + balanco.text(), doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 20, { align: 'right' });
+        doc.text('R$ ' + balanco.text(), doc.internal.pageSize.getWidth() - 20, doc.autoTable.previous.finalY + 20, { align: 'right' });
 
 
 
@@ -1054,10 +1054,6 @@ $(document).ready(function () {
     $('#exportar-pdf').on('click', exportarParaPDF);
 
 
-
-    // exportar excel
-    // Função para exportar dados para Excel
-    // Função para exportar dados para Excel
     // Função para exportar dados para Excel
     function exportarParaExcel() {
         var wb = XLSX.utils.book_new();
