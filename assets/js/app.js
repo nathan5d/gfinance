@@ -41,6 +41,8 @@ $(document).ready(function () {
     // Obter uma referência ao Firestore
     var db = firebase.firestore();
 
+
+
     /*
     * REAL TIME
     */
@@ -241,20 +243,37 @@ $(document).ready(function () {
 
 
     // Função para fazer login com email/senha
-    function loginWithEmail() {
+    function loginWithEmail(e) {
+        e.preventDefault();
         var email = $('#emailInput').val();
         var password = $('#passwordInput').val();
 
+        let loginSucesso = false;
+        let errorMessage = $('#loginErrorMessage');
+
+
+        // Defina o idioma para português (pt)
+        //firebase.auth().useDeviceLanguage();
         // Autenticar com email/senha usando o Firebase Authentication
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(function (userCredential) {
                 // Login bem-sucedido, redirecionar ou executar ações adicionais
                 console.log('Usuário logado:', userCredential.user);
-                $('#loginModal').modal('hide');
+                success = true;
+
             })
             .catch(function (error) {
                 // Tratar erros de login
-                $('#loginErrorMessage').text(error.message);
+                console.log(error.message);
+                errorMessage.text(error.message);
+                errorMessage.show();
+
+            })
+            .finally(function () {
+                // Verificar o valor da variável loginSucesso antes de fechar o modal
+                if (loginSucesso) {
+                    $('#loginModal').modal('hide');
+                }
             });
     }
 
@@ -262,16 +281,28 @@ $(document).ready(function () {
     function loginWithGoogle() {
         var provider = new firebase.auth.GoogleAuthProvider();
 
+
+        let loginSucesso = false;
+        let errorMessage = $('#loginErrorMessage');
+
         // Autenticar com a conta do Google usando o Firebase Authentication
         firebase.auth().signInWithPopup(provider)
             .then(function (userCredential) {
                 // Login bem-sucedido, redirecionar ou executar ações adicionais
                 console.log('Usuário logado:', userCredential.user);
-                $('#loginModal').modal('hide');
+                //$('#loginModal').modal('hide');
+                loginSucesso = true;
             })
             .catch(function (error) {
                 // Tratar erros de login
                 console.error('Erro ao fazer login com o Google:', error);
+                errorMessage.text(error.message);
+                errorMessage.show();
+            })
+            .finally(function(){
+                if(loginSucesso){
+                   $('#loginModal').modal('hide'); 
+                }
             });
     }
 
@@ -1074,7 +1105,53 @@ $(document).ready(function () {
     // Vincula o evento de clique ao botão "Exportar para PDF"
     $('#exportar-pdf').on('click', exportarParaPDF);
 
+    // Formatar valor monetário e retornar como número
+    function formatCurrencyAsNumber(value, decimalPlaces = 2) {
+        // Converte o valor para string e remove possíveis símbolos de moeda
+        let stringValue = String(value).replace(/[^0-9.-]+/g, '');
 
+        // Converte o valor formatado de volta para um número
+        let numericValue = parseFloat(stringValue);
+
+        // Formata o valor monetário adicionando as casas decimais
+        let formattedValue = numericValue.toFixed(decimalPlaces);
+
+        return formattedValue;
+    }
+
+    function formatMeasurement(value, decimalPlaces = 3) {
+        // Converte o valor para número, se possível
+        let numericValue = parseFloat(value);
+
+        // Verifica se o valor é um número válido
+        if (!isNaN(numericValue)) {
+            // Aplica o método toFixed() para limitar as casas decimais
+            let fixedValue = numericValue.toFixed(decimalPlaces);
+
+            // Converte o valor para string
+            let stringValue = String(fixedValue);
+
+            // Divide o valor em parte inteira e decimal
+            let parts = stringValue.split('.');
+            let integerPart = parts[0];
+            let decimalPart = parts[1] || '';
+
+            // Adiciona o separador de milhares à parte inteira
+            let formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+            // Adiciona zeros à direita se necessário
+            let formattedDecimalPart = decimalPart.padEnd(decimalPlaces, '0');
+
+            // Formata o número de medida adicionando o separador decimal e as casas decimais
+            return formattedIntegerPart + (decimalPlaces > 0 ? ',' + formattedDecimalPart : '');
+        } else {
+            // Se não for um número válido, retorne uma string vazia
+            return '';
+        }
+    }
+
+
+    // Função para exportar dados para Excel
     // Função para exportar dados para Excel
     function exportarParaExcel() {
         var wb = XLSX.utils.book_new();
@@ -1089,13 +1166,17 @@ $(document).ready(function () {
         for (var i = 0; i < maxLinhas; i++) {
             var receita = receitas[i] || {};
             var despesa = despesas[i] || {};
-            //var pagoReceita = receita.pago ? "Sim" : "Não";
+            // Formata os valores monetários antes de adicioná-los ao array
+
+            // Formata os valores monetários antes de adicioná-los ao array
+            let valorReceita = parseFloat(receita.valor?.replace(/\./g, "").replace(",", ".")) || ''; //se no lopo nao estiver valores monetarios a serem formatados deixa vazio
+            let valorDespesa = parseFloat(despesa.valor?.replace(/\./g, "").replace(",", ".")) || '';
             var pagoDespesa = despesa.pago ? "Sim" : "Não";
-            dados.push([receita.descricao, receita.valor, despesa.descricao, despesa.valor, pagoDespesa]);
+            dados.push([receita.descricao, valorReceita, despesa.descricao, valorDespesa, pagoDespesa]);
         }
 
         // Dados do balanço
-        var balancoData = [[""], [""], ["Balanço: R$", $('#balanco').text()]];
+        var balancoData = [[""], [""], ["Balanço: R$", formatCurrencyAsNumber($('#balanco').text())]];
 
         var dadosSheet = XLSX.utils.aoa_to_sheet(dados.concat(balancoData));
         XLSX.utils.book_append_sheet(wb, dadosSheet, "Dados");
@@ -1142,7 +1223,7 @@ $(document).ready(function () {
                         if (row[0] != "Balanço: R$") {
                             receitas.push({
                                 descricao: row[0],
-                                valor: row[1],
+                                valor: formatMeasurement(parseFloat(row[1]), 2),
                             });
                         }
                     }
@@ -1157,7 +1238,7 @@ $(document).ready(function () {
                     if (row[2]) {
                         despesas.push({
                             descricao: row[2],
-                            valor: row[3],
+                            valor: formatMeasurement(parseFloat(row[3]), 2),
                             pago: row[4] === "Sim"
                         });
                     }

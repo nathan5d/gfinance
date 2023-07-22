@@ -98,7 +98,7 @@
         Faça login
       </div>
       <div class="content">
-        <div class="ui form">
+        <form class="ui form" id="loginForm">
           <div class="field">
             <label>Email</label>
             <input type="email" id="emailInput" placeholder="Digite seu email">
@@ -107,14 +107,15 @@
             <label>Senha</label>
             <input type="password" id="passwordInput" placeholder="Digite sua senha">
           </div>
+          <!-- Adicione o elemento para exibir a mensagem de erro -->
           <div class="ui error message" id="loginErrorMessage"></div>
           <button class="ui primary button" id="emailLoginButton">Login com Email/Senha</button>
-          <!--<div class="ui horizontal divider">OU</div>
-          <button class="ui google plus button" id="googleLoginButton">
+          <div class="ui horizontal divider">OU</div>
+          <button type="submit" form="" class="ui google plus button" id="googleLoginButton">
             <i class="google icon"></i>
             Login com Google
-          </button>-->
-        </div>
+          </button>
+        </form>
       </div>
     </div>
   </div>
@@ -326,7 +327,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-
 
 
   <script src="./assets/js/app.js"></script>
