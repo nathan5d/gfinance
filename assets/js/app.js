@@ -28,6 +28,16 @@ $(document).ready(function () {
             document.getElementById("userContainer").style.display = "inline-block";
             document.getElementById("userName").textContent = "Olá, " + user.displayName + ' ';
 
+            // Definir a imagem do usuário
+            var userImage = user.photoURL;
+            if (userImage) {
+                $('#imgUser').attr('src', userImage);
+            } else {
+                $('#imgUser').parent().append('<i class="icon sign-out"></i>');
+            }
+
+
+
             // Carregar os dados apenas se o usuário estiver logado
             carregarDados();
         } else {
@@ -242,6 +252,8 @@ $(document).ready(function () {
 
 
 
+
+
     // Função para fazer login com email/senha
     function loginWithEmail(e) {
         e.preventDefault();
@@ -277,34 +289,67 @@ $(document).ready(function () {
             });
     }
 
+    // Função para verificar se o email do usuário está cadastrado na base de dados
+    // Função para verificar se o email do usuário já está cadastrado no Firebase
+    function verificarEmailCadastrado(email) {
+        // Verificar se o email já está cadastrado no Firebase
+        firebase.auth().fetchSignInMethodsForEmail(email)
+            .then((signInMethods) => {
+                // Se a matriz de provedores de login for vazia, o email não está cadastrado
+                if (signInMethods.length === 0) {
+                    // Email não cadastrado, exibir mensagem de erro
+                    $('#loginErrorMessage').text('Este email não está cadastrado. Por favor, faça o registro primeiro.');
+                    $('#loginErrorMessage').show();
+                    // Ou, se preferir, redirecionar o usuário para a página de registro
+                    // window.location.href = '/registro'; // Substitua '/registro' pela URL da página de registro do seu aplicativo
+                } else {
+                    // Email cadastrado, permitir o login
+                    $('#loginModal').modal('hide'); // Fechar o modal de login
+                }
+            })
+            .catch((error) => {
+                console.error('Erro ao verificar o email:', error);
+                // Trate o erro de acordo com sua necessidade
+                // Por exemplo, exiba uma mensagem de erro genérica ou redirecione o usuário para uma página de erro
+            });
+    }
+
     // Função para fazer login com a conta do Google
     function loginWithGoogle() {
         var provider = new firebase.auth.GoogleAuthProvider();
+
 
 
         let loginSucesso = false;
         let errorMessage = $('#loginErrorMessage');
 
         // Autenticar com a conta do Google usando o Firebase Authentication
-        firebase.auth().signInWithPopup(provider)
+        firebase
+            .auth()
+            .signInWithPopup(provider)
             .then(function (userCredential) {
                 // Login bem-sucedido, redirecionar ou executar ações adicionais
                 console.log('Usuário logado:', userCredential.user);
-                //$('#loginModal').modal('hide');
+
+                // Verificar se o email do usuário está cadastrado na base de dados
+                var userEmail = userCredential.user.email;
+                verificarEmailCadastrado(userEmail);
                 loginSucesso = true;
             })
             .catch(function (error) {
                 // Tratar erros de login
                 console.error('Erro ao fazer login com o Google:', error);
+
                 errorMessage.text(error.message);
                 errorMessage.show();
             })
-            .finally(function(){
-                if(loginSucesso){
-                   $('#loginModal').modal('hide'); 
+            .finally(function () {
+                if (loginSucesso) {
+                    $('#loginModal').modal('hide');
                 }
-            });
+            });;
     }
+
 
     // Adicionar evento de clique para o botão de login com email/senha
     $('#emailLoginButton').on('click', loginWithEmail);
