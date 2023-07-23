@@ -62,29 +62,31 @@ $(document).ready(function () {
 
     // Listener em tempo real para a coleção "receitas"
     receitasRef.onSnapshot(function (snapshot) {
-        snapshot.docChanges().forEach(function (change) {
-            var receita = change.doc.data();
-            if (change.type === 'added') {
-                receitas.push(receita);
-            } else if (change.type === 'modified') {
-                var index = receitas.findIndex(function (item) {
-                    return item.id === receita.id;
-                });
-                if (index !== -1) {
-                    receitas[index] = receita;
+        if (verificarAutenticacao()) {
+            snapshot.docChanges().forEach(function (change) {
+                var receita = change.doc.data();
+                if (change.type === 'added') {
+                    receitas.push(receita);
+                } else if (change.type === 'modified') {
+                    var index = receitas.findIndex(function (item) {
+                        return item.id === receita.id;
+                    });
+                    if (index !== -1) {
+                        receitas[index] = receita;
+                    }
+                } else if (change.type === 'removed') {
+                    var index = receitas.findIndex(function (item) {
+                        return item.id === receita.id;
+                    });
+                    if (index !== -1) {
+                        receitas.splice(index, 1);
+                    }
                 }
-            } else if (change.type === 'removed') {
-                var index = receitas.findIndex(function (item) {
-                    return item.id === receita.id;
-                });
-                if (index !== -1) {
-                    receitas.splice(index, 1);
-                }
-            }
-        });
+            });
 
-        // Atualizar a UI com as receitas atualizadas
-        renderReceitas();
+            // Atualizar a UI com as receitas atualizadas
+            renderReceitas();
+        }
     });
 
     // Referência para a coleção "despesas"
@@ -92,26 +94,32 @@ $(document).ready(function () {
 
     // Listener em tempo real para a coleção "despesas"
     despesasRef.onSnapshot(function (snapshot) {
-        snapshot.docChanges().forEach(function (change) {
-            var despesa = change.doc.data();
-            if (change.type === 'added') {
-                despesas.push(despesa);
-            } else if (change.type === 'modified') {
-                var index = despesas.findIndex(function (item) {
-                    return item.id === despesa.id;
-                });
-                if (index !== -1) {
-                    despesas[index] = despesa;
+        if (verificarAutenticacao) {
+            snapshot.docChanges().forEach(function (change) {
+
+
+                var despesa = change.doc.data();
+                if (change.type === 'added') {
+                    despesas.push(despesa);
+                } else if (change.type === 'modified') {
+                    var index = despesas.findIndex(function (item) {
+                        return item.id === despesa.id;
+                    });
+                    if (index !== -1) {
+                        despesas[index] = despesa;
+                    }
+                } else if (change.type === 'removed') {
+                    var index = despesas.findIndex(function (item) {
+                        return item.id === despesa.id;
+                    });
+                    if (index !== -1) {
+                        despesas.splice(index, 1);
+                    }
                 }
-            } else if (change.type === 'removed') {
-                var index = despesas.findIndex(function (item) {
-                    return item.id === despesa.id;
-                });
-                if (index !== -1) {
-                    despesas.splice(index, 1);
-                }
-            }
-        });
+
+
+            });
+        }
 
         // Atualizar a UI com as despesas atualizadas
         renderDespesas();
@@ -271,7 +279,7 @@ $(document).ready(function () {
             .then(function (userCredential) {
                 // Login bem-sucedido, redirecionar ou executar ações adicionais
                 console.log('Usuário logado:', userCredential.user);
-                success = true;
+                loginSucesso = true;
 
             })
             .catch(function (error) {
