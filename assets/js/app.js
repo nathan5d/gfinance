@@ -30,10 +30,17 @@ $(document).ready(function () {
 
             // Definir a imagem do usuário
             var userImage = user.photoURL;
+
+            // var novaImagem = "url('nova_imagem.jpg')";
+            //$("#minha-div").css("background-image", novaImagem);
             if (userImage) {
-                $('#imgUser').attr('src', userImage);
+                $('#openCreateUpdateModal').css("background-image", "url('" + userImage + "')");
+                $('#openCreateUpdateModal').css("background-size", "contain");
+                $('#openCreateUpdateModal').find('i').css("opacity",0)
+
             } else {
-                $('#imgUser').parent().append('<i class="icon sign-out"></i>');
+
+                //$('#imgUser').parent().append('<i class="icon sign-out"></i>');
             }
 
 

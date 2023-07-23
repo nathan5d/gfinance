@@ -70,21 +70,17 @@
       <img class="ui image" src="./assets/img/logo.png" style="width: 15rem;">
     </div>
 
-    <div class="ui right aligned header">
+    <div class="ui center aligned header">
       <div class="ui bottom-20" style="margin-bottom: 20px;">
         <!-- Botão para abrir o modal de login -->
-        <button id="openLoginModal" class="ui button m-auto">
+        <button id="openLoginModal" class="ui labeled icon button m-auto">
           <i class="icon user outline"></i>
           Login
         </button>
         <div id="userContainer" style="display: none;">
-          <span id="userName"></span>
-          <div class="ui tiny circular image" id="openCreateUpdateModal" style="
-          width: 40px;
-          background: #e0e1e2;
-          padding: 2px;
-      ">
-            <img id="imgUser" src="#" alt="">
+          <div class="sub header py-4" id="userName"></div>
+          <div class="ui tiny circular icon button" id="openCreateUpdateModal">
+            <i class="icon user outline"></i>
           </div>
           <button class="ui tiny circular icon button" id="logoutButton">
             <i class="icon sign-out"></i>
