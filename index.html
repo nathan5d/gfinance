@@ -111,7 +111,7 @@
           <!-- Adicione o elemento para exibir a mensagem de erro -->
           <div class="ui error message" id="loginErrorMessage"></div>
           <button class="ui primary button" id="emailLoginButton">Login com Email/Senha</button>
-           <!--<div class="ui horizontal divider">OU</div>
+          <!--<div class="ui horizontal divider">OU</div>
          <button type="submit" form="" class="ui google plus button" id="googleLoginButtonS">
             <i class="google icon"></i>
             Login com Google
@@ -159,10 +159,10 @@
 
     <div class="ui center aligned container">
       <div class="ui center aligned buttons">
-        <button class="ui labeled icon button primary" id="add-receita">
+        <button class="ui labeled icon button secondary" id="add-receita">
           <i class="plus circle icon"></i> Receita
         </button>
-        <button class="ui right labeled icon button primary" id="add-despesa">
+        <button class="ui right labeled icon button secondary" id="add-despesa">
           Despesa
           <i class="right plus circle icon"></i>
         </button>
@@ -221,15 +221,22 @@
 
     <div class="ui buttons">
       <div class="center aligned column">
-        <button id="exportar-excel" class="ui tiny button green">Exportar Excel</button>
-        <div class="ui icon tiny button grey">
+        <button id="exportar-excel" class="ui tiny button secondary icon">
+          <i class="download icon"></i>
+          XLSX
+        </button>
+
+        <div class="ui icon tiny button secondary">
           <label for="importar-excel">
             <i class="upload icon"></i>
             Importar Excel
           </label>
           <input type="file" id="importar-excel" accept=".xlsx, .xls" style="display:none" />
         </div>
-        <button id="exportar-pdf" class="ui tiny button primary">Salvar PDF</button>
+        <button id="exportar-pdf" class="ui tiny button secondary icon">
+          <i class="download icon"></i>
+          PDF
+        </button>
       </div>
     </div>
     <div class="ui actions" style="display: none;">
