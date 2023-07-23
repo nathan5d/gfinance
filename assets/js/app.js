@@ -550,7 +550,7 @@ $(document).ready(function () {
 
 
     // Inicializar os modais com a opção closable: false
-    $('.ui.modal').modal({ closable: false });
+    $('.ui.modal').modal({ closable: true });
 
     // Carregar dados armazenados ao carregar a página
     carregarDados();
