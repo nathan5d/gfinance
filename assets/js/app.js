@@ -36,7 +36,7 @@ $(document).ready(function () {
             if (userImage) {
                 $('#openCreateUpdateModal').css("background-image", "url('" + userImage + "')");
                 $('#openCreateUpdateModal').css("background-size", "contain");
-                $('#openCreateUpdateModal').find('i').css("opacity",0)
+                $('#openCreateUpdateModal').find('i').css("opacity", 0)
 
             } else {
 
@@ -138,7 +138,12 @@ $(document).ready(function () {
 
     // Abrir o modal de login ao clicar no botão
     $('#openLoginModal').on('click', function () {
-        $('#loginModal').modal('show');
+        $('#loginModal').modal({
+            blurring: true,
+            closable: false,
+            transition: 'scale',
+        })
+        .modal('show');
     });
 
     // Abrir o modal de atualização/ criação de usuario
@@ -579,7 +584,7 @@ $(document).ready(function () {
         if (descricao && valor) {
             var receita = {
                 descricao: descricao,
-                valor: formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."),2),
+                valor: formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."), 2),
             };
 
             receitas.push(receita);
@@ -609,7 +614,7 @@ $(document).ready(function () {
         if (descricao && valor) {
             var despesa = {
                 descricao: descricao,
-                valor: formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."),2),
+                valor: formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."), 2),
             };
 
             despesas.push(despesa);
@@ -672,6 +677,7 @@ $(document).ready(function () {
             // Exibir o modal de confirmação de exclusão
             $('#confirmDeleteModal')
                 .modal({
+                    blurring: true,
                     closable: false,
                     onApprove: function () {
                         // Confirmado, realizar a exclusão do item
@@ -707,7 +713,7 @@ $(document).ready(function () {
 
                 // Atualizar os dados da despesa
                 receita.descricao = descricao;
-                receita.valor = formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."),2);
+                receita.valor = formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."), 2);
 
                 // Renderizar as despesas novamente
                 renderReceitas();
@@ -803,6 +809,7 @@ $(document).ready(function () {
             // Exibir o modal de confirmação de exclusão
             $('#confirmDeleteModal')
                 .modal({
+                    blurring: true,
                     closable: false,
                     onApprove: function () {
                         // Confirmado, realizar a exclusão do item
@@ -836,7 +843,7 @@ $(document).ready(function () {
 
                 // Atualizar os dados da despesa
                 despesa.descricao = descricao;
-                despesa.valor = formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."),2);
+                despesa.valor = formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."), 2);
 
                 // Renderizar as despesas novamente
                 renderDespesas();
@@ -1234,9 +1241,9 @@ $(document).ready(function () {
             var pagoDespesa = despesa.pago ? "Sim" : "Não";
             dados.push([receita.descricao, valorReceita, despesa.descricao, valorDespesa, pagoDespesa]);
         }
-let balancoVal = parseFloat($('#balanco').text().replace(/\./g, "").replace(",", "."));
+        let balancoVal = parseFloat($('#balanco').text().replace(/\./g, "").replace(",", "."));
         // Dados do balanço
-        var balancoData = [[""], [""], ["Balanço: R$", formatMeasurement(balancoVal,2)]];
+        var balancoData = [[""], [""], ["Balanço: R$", formatMeasurement(balancoVal, 2)]];
 
         var dadosSheet = XLSX.utils.aoa_to_sheet(dados.concat(balancoData));
         XLSX.utils.book_append_sheet(wb, dadosSheet, "Dados");

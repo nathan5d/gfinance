@@ -78,7 +78,7 @@
           Login
         </button>
         <div id="userContainer" style="display: none;">
-          <div id="userName"></div>
+          <div class="ui header grey" id="userName"></div>
           <div class="ui tiny circular icon button" id="openCreateUpdateModal">
             <i class="icon user outline"></i>
           </div>
@@ -93,7 +93,7 @@
   <div class="ui container">
 
     <!-- Modal de login -->
-    <div class="ui modal" id="loginModal">
+    <div class="ui mini modal" id="loginModal">
       <i class="close icon"></i>
       <div class="header">
         Faça login
@@ -125,7 +125,7 @@
   <div class="ui container">
 
     <!-- Modal de atualização de perfil -->
-    <div class="ui modal" id="createUpdateModal">
+    <div class="ui mini modal" id="createUpdateModal">
       <i class="close icon"></i>
       <div class="header">
         Criação/Atualização de Usuário
@@ -252,21 +252,22 @@
 
 
   <!-- Modal para deletar despesas e receitas -->
-  <div class="ui modal" id="confirmDeleteModal">
-    <i class="close icon"></i>
-    <div class="header">Confirmar Exclusão</div>
+  <div class="ui small basic aligned center modal" id="confirmDeleteModal">
+    <div class="ui icon header">
+      <i class="trash icon"></i>
+      Confirmar Exclusão
+    </div>
     <div class="content">
       <p>Você tem certeza que deseja excluir este item?</p>
     </div>
     <div class="actions">
-      <div class="ui red cancel button">Cancelar</div>
-      <div class="ui green ok button">Confirmar</div>
+      <div class="ui cancel inverted icon button"><i class="remove icon"></i> Cancelar</div>
+      <div class="ui green ok inverted icon button"><i class="checkmark icon"></i> Confirmar</div>
     </div>
   </div>
 
   <!-- Modal para editar despesas e receitas -->
-  <div class="ui modal" id="editModal">
-    <i class="close icon"></i>
+  <div class="ui small modal" id="editModal">
     <div class="header">Editar Item</div>
     <div class="content">
       <div class="ui form">
@@ -288,7 +289,7 @@
 
 
   <!-- Modal para adicionar Receita -->
-  <div id="add-receita-modal" class="ui modal" data-closable="false">
+  <div id="add-receita-modal" class="ui small modal" data-closable="false">
     <i class="close icon"></i>
     <div class="header">Adicionar Receita</div>
     <div class="content">
@@ -304,14 +305,14 @@
       </form>
     </div>
     <div class="actions">
-      <button type="submit" form="form-receita" class="ui positive button">Adicionar</button>
+      <button type="submit" form="form-receita" class="ui primary button">Adicionar</button>
 
-      <div class="ui black deny button">Cancelar</div>
+      <div class="ui deny button">Cancelar</div>
     </div>
   </div>
 
   <!-- Modal para adicionar Despesa -->
-  <div id="add-despesa-modal" class="ui modal" data-closable="false">
+  <div id="add-despesa-modal" class="ui small modal" data-closable="false">
     <i class="close icon"></i>
     <div class="header">Adicionar Despesa</div>
     <div class="content">
@@ -327,9 +328,9 @@
       </form>
     </div>
     <div class="actions">
-      <button type="submit" form="form-despesa" class="ui positive button">Adicionar</button>
+      <button type="submit" form="form-despesa" class="ui primary button">Adicionar</button>
 
-      <div class="ui black deny button">Cancelar</div>
+      <div class="ui deny button">Cancelar</div>
     </div>
   </div>
 
