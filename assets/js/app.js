@@ -579,7 +579,7 @@ $(document).ready(function () {
         if (descricao && valor) {
             var receita = {
                 descricao: descricao,
-                valor: valor
+                valor: formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."),2),
             };
 
             receitas.push(receita);
@@ -609,7 +609,7 @@ $(document).ready(function () {
         if (descricao && valor) {
             var despesa = {
                 descricao: descricao,
-                valor: valor
+                valor: formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."),2),
             };
 
             despesas.push(despesa);
@@ -707,7 +707,7 @@ $(document).ready(function () {
 
                 // Atualizar os dados da despesa
                 receita.descricao = descricao;
-                receita.valor = valor;
+                receita.valor = formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."),2);
 
                 // Renderizar as despesas novamente
                 renderReceitas();
@@ -836,7 +836,7 @@ $(document).ready(function () {
 
                 // Atualizar os dados da despesa
                 despesa.descricao = descricao;
-                despesa.valor = valor;
+                despesa.valor = formatMeasurement(valor.toString().replace(/\./g, "").replace(",", "."),2);
 
                 // Renderizar as despesas novamente
                 renderDespesas();
@@ -1234,9 +1234,9 @@ $(document).ready(function () {
             var pagoDespesa = despesa.pago ? "Sim" : "Não";
             dados.push([receita.descricao, valorReceita, despesa.descricao, valorDespesa, pagoDespesa]);
         }
-
+let balancoVal = parseFloat($('#balanco').text().replace(/\./g, "").replace(",", "."));
         // Dados do balanço
-        var balancoData = [[""], [""], ["Balanço: R$", formatCurrencyAsNumber($('#balanco').text())]];
+        var balancoData = [[""], [""], ["Balanço: R$", formatMeasurement(balancoVal,2)]];
 
         var dadosSheet = XLSX.utils.aoa_to_sheet(dados.concat(balancoData));
         XLSX.utils.book_append_sheet(wb, dadosSheet, "Dados");
@@ -1283,7 +1283,7 @@ $(document).ready(function () {
                         if (row[0] != "Balanço: R$") {
                             receitas.push({
                                 descricao: row[0],
-                                valor: formatMeasurement(parseFloat(row[1]), 2),
+                                valor: formatMeasurement(row[1], 2),
                             });
                         }
                     }
