@@ -29,18 +29,11 @@ $(document).ready(function () {
             document.getElementById("userName").textContent = "Olá, " + user.displayName + ' ';
 
             // Definir a imagem do usuário
-            var userImage = user.photoURL;
-
-            // var novaImagem = "url('nova_imagem.jpg')";
-            //$("#minha-div").css("background-image", novaImagem);
-            if (userImage) {
-                $('#openCreateUpdateModal').css("background-image", "url('" + userImage + "')");
+            if (user.photoURL) {
+                $('#openCreateUpdateModal').css("background-image", "url('" + user.photoURL + "')");
                 $('#openCreateUpdateModal').css("background-size", "contain");
-                $('#openCreateUpdateModal').find('i').css("opacity", 0)
+                $('#openCreateUpdateModal').find('i').toggleClass('user')
 
-            } else {
-
-                //$('#imgUser').parent().append('<i class="icon sign-out"></i>');
             }
 
 
