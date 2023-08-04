@@ -1015,7 +1015,6 @@ $(document).ready(function () {
         // Adiciona a tabela de despesas ao documento PDF
         addTableToPDF(doc, despesasTable, 'Despesas', startY);
 
-        console.log('1', doc.autoTable.previous.finalY);
         doc.setFont(undefined, 'normal');
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
@@ -1026,7 +1025,6 @@ $(document).ready(function () {
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
 
-        console.log('2', doc.autoTable.previous.finalY);
 
         doc.setFont(undefined, 'normal');
 
@@ -1034,8 +1032,6 @@ $(document).ready(function () {
         doc.text('Não Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth), doc.lastAutoTable.finalY + 15, { align: 'right' });
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
-
-        console.log('3 ', doc.autoTable.previous.finalY);
 
         doc.setFont(undefined, 'bold');
         doc.setFontSize(11);
