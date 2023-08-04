@@ -1021,7 +1021,7 @@ $(document).ready(function () {
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
         let text = 'Pago ';
-        doc.text( 'Pago ', doc.internal.pageSize.getWidth() - doc.getTextWidth( 'Pago ' + somaDespesasPagas.text()), doc.lastAutoTable.finalY + 10, { align: 'right' });
+        doc.text( 'Pago ', doc.internal.pageSize.getWidth() - doc.getTextWidth( 'Pago ' + somaDespesasPagas.text())+15, doc.lastAutoTable.finalY + 10, { align: 'right' });
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
 
