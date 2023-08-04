@@ -1019,7 +1019,7 @@ $(document).ready(function () {
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
-        let textWidth = 'Pagas ' + somaDespesasPagas;
+        let textWidth = 'Pagas ' + somaDespesasPagas.text();
 
         console.log(textWidth);
 
@@ -1030,7 +1030,7 @@ $(document).ready(function () {
 
         doc.setFont(undefined, 'normal');
 
-        textWidth = 'Não Pagas ' + somaDespesasNaoPagas;
+        textWidth = 'Não Pagas ' + somaDespesasNaoPagas.text();
 
         console.log(textWidth);
         doc.text('Não Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth), doc.lastAutoTable.finalY + 15, { align: 'right' });
