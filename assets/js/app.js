@@ -973,6 +973,9 @@ $(document).ready(function () {
     function exportarParaPDF() {
         // Cria um novo documento PDF
         var doc = new jspdf.jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4',
             left: 20,
             right: 20,
             top: 60,
@@ -1012,10 +1015,10 @@ $(document).ready(function () {
         // Adiciona a tabela de despesas ao documento PDF
         addTableToPDF(doc, despesasTable, 'Despesas', startY);
 
-
+        var titleWidth = doc.getTextWidth(title); // Calcular a largura do texto
         console.log('1',doc.autoTable.previous.finalY);
         doc.setFont(undefined, 'normal');
-        doc.setFontSize(11);
+        doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
         doc.text('Despesas Pagas R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
