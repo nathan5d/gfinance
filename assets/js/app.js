@@ -136,7 +136,7 @@ $(document).ready(function () {
             closable: false,
             transition: 'scale',
         })
-        .modal('show');
+            .modal('show');
     });
 
     // Abrir o modal de atualização/ criação de usuario
@@ -952,7 +952,7 @@ $(document).ready(function () {
         $('#soma-receitas').text(formatCurrency(somaReceitas));
         $('#soma-despesas').text(formatCurrency(somaDespesas));
 
-        
+
         $('#soma-despesas-pagas').text(formatCurrency(somaDespesasPagas));
         $('#soma-despesas-nao-pagas').text(formatCurrency(somaDespesasNaoPagas));
 
@@ -993,13 +993,13 @@ $(document).ready(function () {
         var balanco = $('#balanco');
 
 
-         // Adiciona os valores
-         var somaReceitas = $('#soma-receitas');
-         var somaDespesas = $('#soma-despesas');
- 
-         
-         var somaDespesasPagas = $('#soma-despesas-pagas');
-         var somaDespesasNaoPagas = $('#soma-despesas-nao-pagas');
+        // Adiciona os valores
+        var somaReceitas = $('#soma-receitas');
+        var somaDespesas = $('#soma-despesas');
+
+
+        var somaDespesasPagas = $('#soma-despesas-pagas');
+        var somaDespesasNaoPagas = $('#soma-despesas-nao-pagas');
 
 
 
@@ -1015,24 +1015,25 @@ $(document).ready(function () {
         // Adiciona a tabela de despesas ao documento PDF
         addTableToPDF(doc, despesasTable, 'Despesas', startY);
 
-        var titleWidth = doc.getTextWidth(title); // Calcular a largura do texto
-        console.log('1',doc.autoTable.previous.finalY);
+        console.log('1', doc.autoTable.previous.finalY);
         doc.setFont(undefined, 'normal');
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
-        doc.text('Despesas Pagas R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
-        console.log('2',doc.autoTable.previous.finalY);
+        doc.text('Despesas Pagas R$ ', doc.internal.pageSize.getWidth() - doc.getTextWidth('Despesas Pagas R$ ') + 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
+        doc.text(somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - doc.getTextWidth(somaDespesasPagas.text()) + 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
+       
+        console.log('2', doc.autoTable.previous.finalY);
         doc.text('Despesas Não Pagas R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
 
-        console.log('3 ',doc.autoTable.previous.finalY);
+        console.log('3 ', doc.autoTable.previous.finalY);
 
         doc.setFont(undefined, 'bold');
         doc.setFontSize(11);
         doc.setTextColor(0, 0, 0);
         doc.text('Balanço R$ ' + balanco.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 20, { align: 'right' });
 
-        console.log('final',doc.autoTable.previous.finalY);
+        console.log('final', doc.autoTable.previous.finalY);
 
         // Adicionar a imagem centralizada no cabeçalho da primeira página
         var imgURL = './assets/img/logo.png'; // Ajuste o caminho da imagem conforme necessário
