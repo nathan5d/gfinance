@@ -1031,7 +1031,7 @@ $(document).ready(function () {
         doc.setFont(undefined, 'normal');
 
         textWidth = 'Não Pagas ' + somaDespesasNaoPagas.text()
-        doc.text('Não Pagas ' + somaDespesasNaoPagas.text(), doc.getTextWidth(textWidth), doc.lastAutoTable.finalY + 15, { align: 'right' });
+        doc.text('Não Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth), doc.lastAutoTable.finalY + 15, { align: 'right' });
         
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
