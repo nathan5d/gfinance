@@ -1012,18 +1012,24 @@ $(document).ready(function () {
         // Adiciona a tabela de despesas ao documento PDF
         addTableToPDF(doc, despesasTable, 'Despesas', startY);
 
+
+        console.log('1',doc.autoTable.previous.finalY);
         doc.setFont(undefined, 'normal');
         doc.setFontSize(11);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
         doc.text('Despesas Pagas R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 10, { align: 'right' });
+        console.log('2',doc.autoTable.previous.finalY);
         doc.text('Despesas Não Pagas R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 20, { align: 'right' });
+
+        console.log('3 ',doc.autoTable.previous.finalY);
 
         doc.setFont(undefined, 'bold');
         doc.setFontSize(11);
         doc.setTextColor(0, 0, 0);
         doc.text('Balanço R$ ' + balanco.text(), doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 10, { align: 'right' });
 
+        console.log('final',doc.autoTable.previous.finalY);
 
         // Adicionar a imagem centralizada no cabeçalho da primeira página
         var imgURL = './assets/img/logo.png'; // Ajuste o caminho da imagem conforme necessário
