@@ -1020,8 +1020,8 @@ $(document).ready(function () {
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
-        doc.text('Despesas Pagas R$ ', doc.internal.pageSize.getWidth() - doc.getTextWidth('Despesas Pagas R$ ') + 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
-        doc.text(somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - doc.getTextWidth(somaDespesasPagas.text()) + 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
+        doc.text('Despesas Pagas R$ ', doc.internal.pageSize.getWidth() - doc.getTextWidth('Despesas Pagas R$ '+somaDespesasPagas.text()) + 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
+        doc.text(somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
        
         console.log('2', doc.autoTable.previous.finalY);
         doc.text('Despesas Não Pagas R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
