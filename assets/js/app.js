@@ -1029,7 +1029,7 @@ $(document).ready(function () {
 
         doc.setFont(undefined, 'normal');
         text = 'Não Pagas '; 
-        doc.text(text, doc.internal.pageSize.getWidth() - doc.getTextWidth(text + somaDespesasNaoPagas.text()), doc.lastAutoTable.finalY + 10, { align: 'right' });
+        doc.text(text, doc.internal.pageSize.getWidth() - doc.getTextWidth(text + somaDespesasNaoPagas.text()), doc.lastAutoTable.finalY + 15, { align: 'right' });
         
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
