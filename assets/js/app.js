@@ -990,6 +990,15 @@ $(document).ready(function () {
         var balanco = $('#balanco');
 
 
+         // Adiciona os valores
+         var somaReceitas = $('#soma-receitas');
+         var somaDespesas = $('#soma-despesas');
+ 
+         
+         var somaDespesasPagas = $('#soma-despesas-pagas');
+         var somaDespesasNaoPagas = $('#soma-despesas-nao-pagas');
+
+
 
         // Definir a posição inicial da primeira tabela
         var startY = 40;
@@ -1010,6 +1019,10 @@ $(document).ready(function () {
         doc.text('Balanço', doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 10, { align: 'right' });
 
         doc.text('R$ ' + balanco.text(), doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 20, { align: 'right' });
+
+        doc.text('Despesas Pagas R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 30, { align: 'right' });
+        doc.text('Despesas Não Pagas R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.autoTable.previous.finalY + 40, { align: 'right' });
+
 
         // Adicionar a imagem centralizada no cabeçalho da primeira página
         var imgURL = './assets/img/logo.png'; // Ajuste o caminho da imagem conforme necessário
