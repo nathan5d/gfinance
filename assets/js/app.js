@@ -1023,7 +1023,7 @@ $(document).ready(function () {
 
         console.log(textWidth);
 
-        doc.text( 'Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth), doc.lastAutoTable.finalY + 10, { align: 'right' });
+        doc.text( 'Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth)+10, doc.lastAutoTable.finalY + 10, { align: 'right' });
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
 
@@ -1033,7 +1033,7 @@ $(document).ready(function () {
         textWidth = 'Não Pagas ' + somaDespesasNaoPagas.text();
 
         console.log(textWidth);
-        doc.text('Não Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth), doc.lastAutoTable.finalY + 15, { align: 'right' });
+        doc.text('Não Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth)+10, doc.lastAutoTable.finalY + 15, { align: 'right' });
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
 
