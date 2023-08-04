@@ -1020,8 +1020,8 @@ $(document).ready(function () {
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
-        let text = 'Pago ';
-        doc.text( 'Pago ', doc.internal.pageSize.getWidth() - doc.getTextWidth(somaDespesasPagas.text().toString() + doc.getTextWidth(text).toString()), doc.lastAutoTable.finalY + 10, { align: 'right' });
+        let text = 'Pago ' + somaDespesasPagas;
+        doc.text( 'Pago ', doc.internal.pageSize.getWidth() - doc.getTextWidth(text), doc.lastAutoTable.finalY + 10, { align: 'right' });
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
 
