@@ -1021,6 +1021,8 @@ $(document).ready(function () {
         // Adicionar título da tabela alinhado à direita
         let textWidth = 'Pagas ' + somaDespesasPagas;
 
+        console.log(textWidth);
+
         doc.text( 'Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth), doc.lastAutoTable.finalY + 10, { align: 'right' });
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
@@ -1029,6 +1031,8 @@ $(document).ready(function () {
         doc.setFont(undefined, 'normal');
 
         textWidth = 'Não Pagas ' + somaDespesasNaoPagas;
+
+        console.log(textWidth);
         doc.text('Não Pagas ', doc.internal.pageSize.getWidth() - doc.getTextWidth(textWidth), doc.lastAutoTable.finalY + 15, { align: 'right' });
         doc.setFont(undefined, 'bold');
         doc.text('R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
