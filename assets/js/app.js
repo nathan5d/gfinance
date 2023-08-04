@@ -944,11 +944,15 @@ $(document).ready(function () {
 
         var somaReceitas = totalReceitas;
         var somaDespesas = totalDespesas;
+        var somaDespesasPagas = totalDespesasPagas;
 
 
         // Atualizar as somas das receitas e despesas
         $('#soma-receitas').text(formatCurrency(somaReceitas));
         $('#soma-despesas').text(formatCurrency(somaDespesas));
+
+        
+        $('#soma-despesas-pagas').text(formatCurrency(somaDespesasPagas));
 
     }
 
