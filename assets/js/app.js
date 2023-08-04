@@ -945,6 +945,7 @@ $(document).ready(function () {
         var somaReceitas = totalReceitas;
         var somaDespesas = totalDespesas;
         var somaDespesasPagas = totalDespesasPagas;
+        var somaDespesasNaoPagas = totalDespesasNaoPagas;
 
 
         // Atualizar as somas das receitas e despesas
@@ -953,6 +954,7 @@ $(document).ready(function () {
 
         
         $('#soma-despesas-pagas').text(formatCurrency(somaDespesasPagas));
+        $('#soma-despesas-nao-pagas').text(formatCurrency(somaDespesasNaoPagas));
 
     }
 
