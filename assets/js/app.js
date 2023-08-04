@@ -1020,14 +1020,19 @@ $(document).ready(function () {
         doc.setFontSize(10);
         doc.setTextColor(0, 0, 0);
         // Adicionar título da tabela alinhado à direita
-        doc.text('Pago R$ ', doc.internal.pageSize.getWidth() - doc.getTextWidth('Pago R$ '+somaDespesasPagas.text()), doc.lastAutoTable.finalY + 10, { align: 'right' });
+        let text = 'Pago ';
+        doc.text(text, doc.internal.pageSize.getWidth() - doc.getTextWidth(text + somaDespesasPagas.text()), doc.lastAutoTable.finalY + 10, { align: 'right' });
         doc.setFont(undefined, 'bold');
-        doc.text(somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
-       
+        doc.text('R$ ' + somaDespesasPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 10, { align: 'right' });
+
         console.log('2', doc.autoTable.previous.finalY);
 
         doc.setFont(undefined, 'normal');
-        doc.text('Despesas Não Pagas R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
+        text = 'Não Pagas '; 
+        doc.text(text, doc.internal.pageSize.getWidth() - doc.getTextWidth(text + somaDespesasNaoPagas.text()), doc.lastAutoTable.finalY + 10, { align: 'right' });
+        
+        doc.setFont(undefined, 'bold');
+        doc.text('R$ ' + somaDespesasNaoPagas.text(), doc.internal.pageSize.getWidth() - 15, doc.lastAutoTable.finalY + 15, { align: 'right' });
 
         console.log('3 ', doc.autoTable.previous.finalY);
 
